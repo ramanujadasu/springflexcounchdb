@@ -1,0 +1,33 @@
+server:
+  port: 9192
+  
+spring:
+  couchdb:
+    user: admin
+    password: admin
+    url: http://localhost:5984
+    
+  codec:
+    max-in-memory-size: 1MB
+    
+#  datasource:
+ #   url: jdbc:mysql://localhost:3306/liquibase_demo?createDatabaseIfNotExist=true&useSSL=false&allowMultiQueries=true
+  #  username: root
+   # password: R@kuten@250987
+    
+#  liquibase:
+ #   change-log: classpath:/db/changelog/db.changelog-master.yaml
+  
+#server.servlet.context-path=/employee-management
+
+
+logging:
+  level:
+    org:
+      springframework: DEBUG
+    reactor:
+      netty:
+        http:
+          client:
+            HttpClient: DEBUG
+    #liquibase: INFO
