@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springflexcounchdb.dto.CreateResponseDTO;
 import com.springflexcounchdb.dto.EmployeeDTO;
 import com.springflexcounchdb.service.EmployeeService;
 
@@ -29,7 +31,7 @@ public class EmployeeController {
 
 	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Flux<EmployeeDTO> findAll() {
+	public Flux<Object> findAll() {
 		return employeeService.findAll();
 		// return CommonUtils.convertResponse(employeeService.findAll(), message,
 		// HttpStatus.OK);
@@ -47,20 +49,21 @@ public class EmployeeController {
 
 	@PostMapping(value = "/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Mono<EmployeeDTO> create(@RequestBody EmployeeDTO employeeDTO) {
+	public Mono<CreateResponseDTO> create(@RequestBody EmployeeDTO employeeDTO) {
 		return employeeService.create(employeeDTO);
 	}
 
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/update")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<EmployeeDTO> update(@RequestBody EmployeeDTO employeeDTO, @PathVariable("id") String id) {
+	public Mono<Object> update(@RequestBody EmployeeDTO employeeDTO, @RequestParam(required = true, name="id") String id,  @RequestParam(required = true, name="rev_id") String revId) {
 		employeeDTO.setId(id);
+		employeeDTO.setRev(revId);
 		return employeeService.update(employeeDTO);
 	}
 
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping(value = "/delete")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Void> delete(@PathVariable("id") String id) {
-		return employeeService.delete(id);
+	public Mono<Object> delete(@RequestParam(required = true, name="id") String id, @RequestParam(required = true, name="rev_id") String revId) {
+		return employeeService.delete(id, revId);
 	}
 }

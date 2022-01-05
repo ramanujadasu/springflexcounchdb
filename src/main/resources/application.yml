@@ -1,14 +1,14 @@
 server:
   port: 9192
-  
+
+couchdb:
+  user: admin
+  password: admin
+  url: http://localhost:5984  
+
 spring:
-  couchdb:
-    user: admin
-    password: admin
-    url: http://localhost:5984
-    
-  codec:
-    max-in-memory-size: 1MB
+ codec:
+   max-in-memory-size: 1MB
     
 #  datasource:
  #   url: jdbc:mysql://localhost:3306/liquibase_demo?createDatabaseIfNotExist=true&useSSL=false&allowMultiQueries=true

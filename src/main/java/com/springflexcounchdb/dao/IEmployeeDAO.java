@@ -7,15 +7,15 @@ import reactor.core.publisher.Mono;
 
 public interface IEmployeeDAO {
 	
-	Flux<Employee> findAll();
+	Flux<Object> findAll();
 
 	Mono<Employee> findById(String id);
 
 	Mono<Object> findByName(String name);
 
-	Mono<Employee> create(Employee e);
+	Mono<Object> create(Employee e);
 
-	Mono<Employee> update(Employee e);
+	Mono<Object> update(Employee e);
 
-	Mono<Void> delete(String id);
+	Mono<Object> delete(String id, String revId);
 }

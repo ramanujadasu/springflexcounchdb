@@ -19,15 +19,20 @@ import reactor.core.publisher.Mono;
 public class EmployeeDAO implements IEmployeeDAO {
 	@Autowired
 	WebClient webClient;
+	private Duration duration = Duration.ofMillis(10_000);
 
-	public Flux<Employee> findAll() {
-		return webClient.get().uri("/employees").retrieve().bodyToFlux(Employee.class)
-				.timeout(Duration.ofMillis(10_000));
+	public Flux<Object> findAll() {
+		return webClient.get().uri("/employees/_all_docs").retrieve().bodyToFlux(Object.class)
+				.timeout(duration);
 	}
 
-	public Mono<Employee> create(Employee empl) {
-		return webClient.post().uri("/employees").body(Mono.just(empl), Employee.class).retrieve()
-				.bodyToMono(Employee.class).timeout(Duration.ofMillis(10_000));
+	public Mono<Object> create(Employee empl) {
+		
+		String body = "{\"_id\":\""+empl.get_id()+"\",\"name\":\""+empl.getName()+"\",\"age\":+"+empl.getAge()+",\"createTime\":\""+empl.getCreateTime()+"\"}";
+		
+		return webClient.post().uri("/employees").accept(MediaType.APPLICATION_JSON)
+				.body(BodyInserters.fromObject(body)).retrieve()
+				.bodyToMono(Object.class).timeout(duration);
 	}
 
 	public Mono<Object> findByName(String name) {
@@ -59,13 +64,28 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 	}
 
-	public Mono<Employee> update(Employee e) {
-		return webClient.put().uri("/employees/" + e.get_id()).body(Mono.just(e), Employee.class).retrieve()
-				.bodyToMono(Employee.class);
+	public Mono<Object> update(Employee e) {
+		
+		String body = "{\"name\":\""+e.getName()+"\",\"age\":"+e.getAge()+", \"_rev\" :\""+e.get_rev()+"\"}";//"{\""+id+"\": [\""+revId+"\"]}";
+		//{ "123": [ "1-638ede4e484d9d9c5abcbe60154d33c0" ] }
+				return webClient.put().uri("/employees/"+e.get_id()).accept(MediaType.APPLICATION_JSON)
+						.body(BodyInserters.fromObject(body)).retrieve()
+						.bodyToMono(Object.class).timeout(duration);
+				
+				
+//		return webClient.put().uri("/employees/" + e.get_id()).body(Mono.just(e), Employee.class).retrieve()
+//				.bodyToMono(Employee.class);
 	}
 
-	public Mono<Void> delete(String id) {
-		return webClient.delete().uri("/employees/" + id).retrieve().bodyToMono(Void.class);
+	public Mono<Object> delete(String id, String revId) {
+		
+String body = "{\""+id+"\": [\""+revId+"\"]}";
+//{ "123": [ "1-638ede4e484d9d9c5abcbe60154d33c0" ] }
+		return webClient.post().uri("/employees/_purge").accept(MediaType.APPLICATION_JSON)
+				.body(BodyInserters.fromObject(body)).retrieve()
+				.bodyToMono(Object.class).timeout(duration);
+		
+		//return webClient.delete().uri("/employees/" + id).retrieve().bodyToMono(Void.class);
 	}
 
 }

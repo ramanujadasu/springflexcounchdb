@@ -1,5 +1,6 @@
 package com.springflexcounchdb.mapping;
 
+import com.springflexcounchdb.common.CommonUtils;
 import com.springflexcounchdb.dto.EmployeeDTO;
 import com.springflexcounchdb.model.Employee;
 
@@ -10,7 +11,7 @@ public class MappingDtoToEntity {
 
 	public static Employee convertEmployeeEntity(EmployeeDTO e̛mployeeDto) {
 		return new Employee(e̛mployeeDto.getId(), e̛mployeeDto.getRev(), e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
-				e̛mployeeDto.getCreateTime());
+				CommonUtils.getLocalTime());
 	}
 
 	public static Mono<EmployeeDTO> convertEmpoyeeToMono(Mono<Employee> employee) {
@@ -41,7 +42,7 @@ public class MappingDtoToEntity {
 	public static Flux<Employee> convertEmployeeDtoToFlux(Flux<EmployeeDTO> employeeDTO) {
 		return employeeDTO.flatMap(e̛mployeeDto -> {
 			final Employee employee =  new Employee(e̛mployeeDto.getId(), e̛mployeeDto.getRev(), e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
-					e̛mployeeDto.getCreateTime());
+					CommonUtils.getLocalTime());
 			return Flux.just(employee);
 		});
 	}
@@ -49,7 +50,7 @@ public class MappingDtoToEntity {
 	public static Mono<Employee> convertEmployeeDtoToMono(Mono<EmployeeDTO> employeeDTO) {
 		return employeeDTO.flatMap(e̛mployeeDto -> {
 			final Employee employee =  new Employee(e̛mployeeDto.getId(), e̛mployeeDto.getRev(), e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
-					e̛mployeeDto.getCreateTime());
+					CommonUtils.getLocalTime());
 			return Mono.just(employee);
 		});
 	}

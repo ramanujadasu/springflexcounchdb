@@ -1,15 +1,16 @@
 package com.springflexcounchdb.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -17,5 +18,5 @@ public class Employee implements Serializable {
 	String _rev;
 	String name;
 	Integer age;
-	LocalDate createTime;
+	String createTime;
 }
