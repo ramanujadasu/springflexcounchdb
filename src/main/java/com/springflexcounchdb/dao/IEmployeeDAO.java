@@ -1,5 +1,6 @@
 package com.springflexcounchdb.dao;
 
+import com.springflexcounchdb.dto.SearchDTO;
 import com.springflexcounchdb.model.Employee;
 
 import reactor.core.publisher.Flux;
@@ -18,4 +19,9 @@ public interface IEmployeeDAO {
 	Mono<Object> update(Employee e);
 
 	Mono<Object> delete(String id, String revId);
+
+	Mono<Object> findByProperties(SearchDTO searchDTO);
+	
+	Mono<Object> findByProperties(String searchAsString);
+	
 }

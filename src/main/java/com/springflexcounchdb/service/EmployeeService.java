@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springflexcounchdb.dao.IEmployeeDAO;
 import com.springflexcounchdb.dto.CreateResponseDTO;
 import com.springflexcounchdb.dto.EmployeeDTO;
+import com.springflexcounchdb.dto.SearchDTO;
 import com.springflexcounchdb.mapping.MappingDtoToEntity;
 
 import reactor.core.publisher.Flux;
@@ -64,6 +65,15 @@ public class EmployeeService implements IEmployeeService {
 	public Mono<Object> delete(String id, String revId) {
 		
 		return iEmployeeDAO.delete(id, revId);
+	}
+
+	public Mono<Object> findByProperties(SearchDTO searchDTO) {
+		return iEmployeeDAO.findByProperties(searchDTO);
+	}
+
+	@Override
+	public Mono<Object> findByProperties(String searchAsString) {
+		return iEmployeeDAO.findByProperties(searchAsString);
 	}
 
 }

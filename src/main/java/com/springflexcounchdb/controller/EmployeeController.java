@@ -1,5 +1,7 @@
 package com.springflexcounchdb.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springflexcounchdb.dto.CreateResponseDTO;
 import com.springflexcounchdb.dto.EmployeeDTO;
-import com.springflexcounchdb.service.EmployeeService;
+import com.springflexcounchdb.service.IEmployeeService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,7 +29,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/employees")
 public class EmployeeController {
 	@Autowired
-	private EmployeeService employeeService;
+	private IEmployeeService employeeService;
 
 	// private String message= "Given api successfully executed.";
 
@@ -42,11 +46,31 @@ public class EmployeeController {
 		return employeeService.findById(id);
 	}
 
-	@GetMapping(value = "/_find/{name}")
+	@GetMapping(value = "/find/{name}")
 	public Mono<Object> findByName(@PathVariable("name") String name) {
 		return employeeService.findByName(name);
 	}
 
+	@PostMapping(value = "/find")
+	public Mono<Object> findByProperties(@RequestBody Map<String, Object> searchAsString) {
+		
+		 // Do whatever with the json as String 
+	    System.out.println(searchAsString);
+
+//	    Gson gson = new Gson();
+//        String json = gson.toJson(payload); 
+	    String json = "";
+		try {
+			json = new ObjectMapper().writeValueAsString(searchAsString);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    System.out.println(json);
+	    
+		return employeeService.findByProperties(json);
+	}
+	
 	@PostMapping(value = "/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<CreateResponseDTO> create(@RequestBody EmployeeDTO employeeDTO) {
