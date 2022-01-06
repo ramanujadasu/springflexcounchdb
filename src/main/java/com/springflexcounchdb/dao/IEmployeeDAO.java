@@ -15,12 +15,18 @@ public interface IEmployeeDAO {
 	Mono<Object> findByName(String name);
 
 	Mono<Object> create(Employee e);
+	
+	Mono<Object> createDataBase(String database);
 
 	Mono<Object> update(Employee e);
+	
+	Mono<Object> update(Employee e, String revId);
 
 	Mono<Object> delete(String id, String revId);
 
 	Mono<Object> findByProperties(SearchDTO searchDTO);
+	
+	Mono<Object> findByProperties(String name, String addressId);
 	
 	Mono<Object> findByProperties(String searchAsString);
 	

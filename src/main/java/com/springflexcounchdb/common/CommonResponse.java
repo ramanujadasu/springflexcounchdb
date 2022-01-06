@@ -2,14 +2,17 @@ package com.springflexcounchdb.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class ResponseEntity {
+public class CommonResponse {
 
-	Object result;
+	Object object;
 	String message;
 	Integer statusCode;
+
 }
