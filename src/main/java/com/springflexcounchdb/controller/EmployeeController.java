@@ -80,8 +80,8 @@ public class EmployeeController {
 		return employeeService.findByProperties(name, addressId);
 	}
 	@PostMapping(value = "/create")
-	public Mono<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {
-//	public Mono<Object> create(@RequestBody EmployeeDTO employeeDTO) {
+	//public Mono<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {
+	public Mono<Object> create(@RequestBody EmployeeDTO employeeDTO) {
 //	public ResponseEntity<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {	
 
 		//CommonResponse cr = new CommonResponse(employeeService.create(employeeDTO), "", HttpStatus.OK);
@@ -89,15 +89,15 @@ public class EmployeeController {
 		//return Mono.cast(cr).checkpoint().cast(null);
 		//return MappingDtoToEntity.convertResponse(employeeService.create(employeeDTO), "", HttpStatus.CREATED);
 		
-		Object object = null;
-		try {
-			object = employeeService.create(employeeDTO).toFuture().get();
-			System.out.println("Object: "+ object);
-			
-		} catch (InterruptedException | ExecutionException e) {
-			System.out.println("Exception: "+e.getMessage());
-		}
-		return Mono.just(new CommonResponse(object, "Given data inserted succesfully", HttpStatus.OK.value()));
+//		Object object = null;
+//		try {
+//			object = employeeService.create(employeeDTO).toFuture().get();
+//			System.out.println("Object: "+ object);
+//			
+//		} catch (InterruptedException | ExecutionException e) {
+//			System.out.println("Exception: "+e.getMessage());
+//		}
+		return employeeService.create(employeeDTO);//Mono.just(new CommonResponse(object, "Given data inserted succesfully", HttpStatus.OK.value()));
 	}
 
 	@PutMapping(value = "/update2")

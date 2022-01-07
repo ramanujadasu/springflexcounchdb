@@ -22,7 +22,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 	WebClient webClient;
 	private Duration duration = Duration.ofMillis(10_000);
 	
-	public String database = "newemployee";
+	public String database = "employees";
 
 	public Flux<Object> findAll() {
 		return webClient.get().uri("/"+database+"/_all_docs").retrieve().bodyToFlux(Object.class).timeout(duration);
@@ -79,7 +79,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 	}
 
-	public Mono<Object> update(Employee e) {
+	public Mono<Object> updateDetails(Employee e) {
 
 		String body = "{\"name\":\"" + e.getName() + "\",\"age\":" + e.getAge() + ", \"_rev\" :\"" + null
 				+ "\"}";// "{\""+id+"\": [\""+revId+"\"]}";
@@ -92,12 +92,11 @@ public class EmployeeDAO implements IEmployeeDAO {
 	}
 
 	
-	public Mono<Object> update(Employee empl, String revId) {
+	public Mono<Object> update(Employee empl) {
 
 //		String body = "{\"name\":\"" + e.getName() + "\",\"age\":" + e.getAge() + ", \"_rev\" :\"" + null
 //				+ "\"}";// "{\""+id+"\": [\""+revId+"\"]}";
 //		// { "123": [ "1-638ede4e484d9d9c5abcbe60154d33c0" ] }
-		empl.set_rev(revId);
 		String body = CommonUtils.convertEntityToJsonObject(empl);
 		return webClient.put().uri("/"+database+"/" + empl.getId()).accept(MediaType.APPLICATION_JSON)
 				.body(BodyInserters.fromObject(body)).retrieve().bodyToMono(Object.class).timeout(duration);

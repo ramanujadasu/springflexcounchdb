@@ -73,13 +73,16 @@ public class EmployeeService implements IEmployeeService {
 	public Mono<Object> update(EmployeeDTO e) {
 		String employeeRevId = null;
 		try {
-			employeeRevId = iEmployeeDAO.findById(e.getId()).toFuture().get().get_rev();
+			System.out.println("Employee getting existing info: "+e.getId());
+			 Employee em = iEmployeeDAO.findById(e.getId()).toFuture().get();
+			 employeeRevId = em.get_rev();
 			System.out.println("Employee employeeRevId: "+employeeRevId);
 		} catch (InterruptedException | ExecutionException ex) {
 			System.out.println("Exception: "+ex.getMessage());
 		}
-		
-		return iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e), employeeRevId);
+		Employee employee = MappingDtoToEntity.convertEmployeeEntity(e);
+		employee.set_rev(employeeRevId);
+		return iEmployeeDAO.update(employee);
 	}
 
 	

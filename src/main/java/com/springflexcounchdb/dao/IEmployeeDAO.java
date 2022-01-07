@@ -18,9 +18,9 @@ public interface IEmployeeDAO {
 	
 	Mono<Object> createDataBase(String database);
 
-	Mono<Object> update(Employee e);
+	Mono<Object> updateDetails(Employee e);
 	
-	Mono<Object> update(Employee e, String revId);
+	Mono<Object> update(Employee e);
 
 	Mono<Object> delete(String id, String revId);
 

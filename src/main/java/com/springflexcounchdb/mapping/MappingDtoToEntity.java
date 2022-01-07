@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 public class MappingDtoToEntity {
 
 	public static Employee convertEmployeeEntity(EmployeeDTO e̛mployeeDto) {
-		return new Employee(e̛mployeeDto.getId(), null, e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
+		return new Employee(e̛mployeeDto.getId(),e̛mployeeDto.getRev(), e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
 				convertEmpoyeeDTOToEntity(e̛mployeeDto.getAddress()));
 	}
 
@@ -38,7 +38,7 @@ public class MappingDtoToEntity {
 
 	public static Mono<EmployeeDTO> convertEmpoyeeToMono(Mono<Employee> employee) {
 		return employee.flatMap(employe -> {
-			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getId(), employe.getName(), employe.getAge(),
+			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getId(), employe.get_rev(),employe.getName(), employe.getAge(),
 					convertEmpoyeeToDTO(employe.getAddress()));
 
 //	                studentDto.setStudents(
@@ -55,7 +55,7 @@ public class MappingDtoToEntity {
 
 	public static Flux<EmployeeDTO> convertEmployeeToFlux(Flux<Employee> employee) {
 		return employee.flatMap(employe -> {
-			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getId(), employe.getName(), employe.getAge(),
+			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getId(), employe.get_rev(), employe.getName(), employe.getAge(),
 					convertEmpoyeeToDTO(employe.getAddress()));
 			return Flux.just(employeeDTO);
 		});
@@ -63,7 +63,7 @@ public class MappingDtoToEntity {
 
 	public static Flux<Employee> convertEmployeeDtoToFlux(Flux<EmployeeDTO> employeeDTO) {
 		return employeeDTO.flatMap(e̛mployeeDto -> {
-			final Employee employee = new Employee(e̛mployeeDto.getId(), null, e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
+			final Employee employee = new Employee(e̛mployeeDto.getId(), e̛mployeeDto.getRev(), e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
 					convertEmpoyeeDTOToEntity(e̛mployeeDto.getAddress()));
 			return Flux.just(employee);
 		});
@@ -71,7 +71,7 @@ public class MappingDtoToEntity {
 
 	public static Mono<Employee> convertEmployeeDtoToMono(Mono<EmployeeDTO> employeeDTO) {
 		return employeeDTO.flatMap(e̛mployeeDto -> {
-			final Employee employee = new Employee(e̛mployeeDto.getId(), null, e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
+			final Employee employee = new Employee(e̛mployeeDto.getId(), e̛mployeeDto.getRev(), e̛mployeeDto.getName(), e̛mployeeDto.getAge(),
 					convertEmpoyeeDTOToEntity(e̛mployeeDto.getAddress()));
 			return Mono.just(employee);
 		});

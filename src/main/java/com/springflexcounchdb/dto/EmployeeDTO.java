@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class EmployeeDTO {
 
 	String id;
+	String rev;
 	String name;
 	Integer age;
 	private List<AddressDTO> address;
