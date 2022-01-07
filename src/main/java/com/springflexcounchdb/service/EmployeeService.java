@@ -3,7 +3,9 @@ package com.springflexcounchdb.service;
 import java.time.Instant;
 import java.util.concurrent.ExecutionException;
 
+import com.springflexcounchdb.dao.EmployeeDAO2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.springflexcounchdb.common.CommonUtils;
@@ -19,6 +21,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class EmployeeService implements IEmployeeService {
 	@Autowired
+	@Qualifier("employeeDAO2")
 	IEmployeeDAO iEmployeeDAO;
 
 	public Flux<Object> findAll() {
@@ -62,19 +65,19 @@ public class EmployeeService implements IEmployeeService {
 		return iEmployeeDAO.create(employee);// Mono.just(resCreateResponseDTO);
 	}
 
-	public Mono<Object> findByName(String name) {
+	public Flux<Object> findByName(String name) {
 		return iEmployeeDAO.findByName(name);
 	}
 
 	public Mono<EmployeeDTO> findById(String id) {
-		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.findById(id));
+		return MappingDtoToEntity.convertObjectToMono(iEmployeeDAO.findById(id));
 	}
 
 	public Mono<Object> update(EmployeeDTO e) {
 		String employeeRevId = null;
 		try {
 			System.out.println("Employee getting existing info: "+e.getId());
-			 Employee em = iEmployeeDAO.findById(e.getId()).toFuture().get();
+			 Employee em = (Employee) iEmployeeDAO.findById(e.getId()).toFuture().get();
 			 employeeRevId = em.get_rev();
 			System.out.println("Employee employeeRevId: "+employeeRevId);
 		} catch (InterruptedException | ExecutionException ex) {

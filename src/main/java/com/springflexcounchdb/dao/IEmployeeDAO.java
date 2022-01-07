@@ -10,9 +10,9 @@ public interface IEmployeeDAO {
 	
 	Flux<Object> findAll();
 
-	Mono<Employee> findById(String id);
+	Mono<Object> findById(String id);
 
-	Mono<Object> findByName(String name);
+	Flux<Object> findByName(String name);
 
 	Mono<Object> create(Employee e);
 	

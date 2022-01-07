@@ -12,7 +12,7 @@ public interface IEmployeeService {
 
 	Mono<EmployeeDTO> findById(String id);
 
-	Mono<Object> findByName(String name);
+	Flux<Object> findByName(String name);
 
 	Mono<Object> create(EmployeeDTO e);
 

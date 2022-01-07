@@ -50,7 +50,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/find-by-name/{name}")
-	public Mono<Object> findByName(@PathVariable("name") String name) {
+	public Flux<Object> findByName(@PathVariable("name") String name) {
 		return employeeService.findByName(name);
 	}
 
