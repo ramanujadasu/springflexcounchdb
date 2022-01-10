@@ -27,6 +27,6 @@ public interface IEmployeeService {
 	
 	Mono<Employee> findByProperties(String name, String addressId);
 
-	Mono<EmployeeDTO> createDataBase(String database);
+	Mono<String> createDataBase(String database);
 
 }

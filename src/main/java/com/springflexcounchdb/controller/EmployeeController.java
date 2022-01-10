@@ -2,10 +2,10 @@ package com.springflexcounchdb.controller;
 
 import java.util.Map;
 
-import com.springflexcounchdb.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springflexcounchdb.dto.EmployeeDTO;
+import com.springflexcounchdb.model.Employee;
 import com.springflexcounchdb.service.IEmployeeService;
 
 import reactor.core.publisher.Flux;
@@ -31,14 +33,16 @@ public class EmployeeController {
 	@Autowired
 	private IEmployeeService employeeService;
 
-	// private String message= "Given api successfully executed.";
-
 	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Flux<Employee> findAll() {
-		return employeeService.findAll();
-		// return CommonUtils.convertResponse(employeeService.findAll(), message,
-		// HttpStatus.OK);
+	public Flux<ResponseEntity<?>> findAll() {
+		Flux<ResponseEntity<?>> response = null;
+		try {
+			response = Flux.just(new ResponseEntity<>(employeeService.findAll(), HttpStatus.OK));
+		} catch (Exception ex) {
+			return Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		}
+		return response;
 	}
 
 	@GetMapping(value = "/{id}")
@@ -47,8 +51,65 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/find-by-name/{name}")
-	public Flux<Employee> findByName(@PathVariable("name") String name) {
-		return employeeService.findByName(name);
+	public Flux<ResponseEntity<?>> findByName(@PathVariable("name") String name) {
+		Flux<ResponseEntity<?>> response = null;
+		try {
+			response = Flux.just(new ResponseEntity<>(employeeService.findByName(name), HttpStatus.OK));
+		} catch (Exception ex) {
+			return Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		}
+		return response;
+	}
+
+	@PostMapping(value = "/create")
+	public Mono<ResponseEntity<?>> create(@RequestBody EmployeeDTO employeeDTO) {
+		Mono<ResponseEntity<?>> response = null;
+		try {
+			response = Mono.just(new ResponseEntity<>(employeeService.create(employeeDTO), HttpStatus.OK));
+		} catch (Exception ex) {
+			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		}
+		return response;
+	}
+
+	@PutMapping(value = "/update/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public Mono<ResponseEntity<?>> update(@RequestBody EmployeeDTO employeeDTO,
+			@PathVariable(required = true, name = "id") String id) {
+		employeeDTO.setId(id);
+		Mono<ResponseEntity<?>> response = null;
+		try {
+			response = Mono.just(new ResponseEntity<>(employeeService.update(employeeDTO), HttpStatus.OK));
+		} catch (Exception ex) {
+			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		}
+		return response;
+	}
+
+	@DeleteMapping(value = "/delete/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public Mono<ResponseEntity<?>> delete(@PathVariable(required = true, name = "id") String id) {
+		Mono<ResponseEntity<?>> response = null;
+		try {
+			response = Mono.just(new ResponseEntity<>(employeeService.delete(id), HttpStatus.OK));
+		} catch (Exception ex) {
+			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		}
+		return response;
+	}
+
+	@GetMapping(value = "/createDatabase/{database}")
+	public Mono<ResponseEntity<?>> createDatabase(@PathVariable String database) {
+		Mono<ResponseEntity<?>> response = null;
+		try {
+			response = Mono.just(new ResponseEntity<>(employeeService.createDataBase(database), HttpStatus.CREATED));
+//		} //catch (DuplicateDataException excep) {
+//			return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT,
+//					Constant.FIELD_NAME + excep.getRejectedValue(), excep));
+		} catch (Exception ex) {
+			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		}
+		return response;
 	}
 
 	@PostMapping(value = "/find2")
@@ -73,46 +134,7 @@ public class EmployeeController {
 	@GetMapping(value = "/find")
 	public Mono<Employee> findByProperties(@RequestParam String name, @RequestParam String addressId) {
 
-		System.out.println("Name: "+name +", addressId: "+ addressId);
+		System.out.println("Name: " + name + ", addressId: " + addressId);
 		return employeeService.findByProperties(name, addressId);
-	}
-	@PostMapping(value = "/create")
-	//public Mono<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {
-	public Mono<Employee> create(@RequestBody EmployeeDTO employeeDTO) {
-//	public ResponseEntity<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {	
-
-		//CommonResponse cr = new CommonResponse(employeeService.create(employeeDTO), "", HttpStatus.OK);
-		// return new ResponseEntity<CommonResponse>(HttpStatus.OK).ok(cr);
-		//return Mono.cast(cr).checkpoint().cast(null);
-		//return MappingDtoToEntity.convertResponse(employeeService.create(employeeDTO), "", HttpStatus.CREATED);
-		
-//		Object object = null;
-//		try {
-//			object = employeeService.create(employeeDTO).toFuture().get();
-//			System.out.println("Object: "+ object);
-//			
-//		} catch (InterruptedException | ExecutionException e) {
-//			System.out.println("Exception: "+e.getMessage());
-//		}
-		return employeeService.create(employeeDTO);//Mono.just(new CommonResponse(object, "Given data inserted succesfully", HttpStatus.OK.value()));
-	}
-
-	@PutMapping(value = "/update/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Mono<EmployeeDTO> update(@RequestBody EmployeeDTO employeeDTO,
-			@PathVariable(required = true, name = "id") String id) {
-		employeeDTO.setId(id);
-		return employeeService.update(employeeDTO);
-	}
-
-	@DeleteMapping(value = "/delete/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Mono<EmployeeDTO> delete(@PathVariable(required = true, name = "id") String id) {
-		return employeeService.delete(id);
-	}
-
-	@GetMapping(value = "/createDatabase/{database}")
-	public Mono<EmployeeDTO> createDatabase(@PathVariable String database) {
-		return employeeService.createDataBase(database);
 	}
 }

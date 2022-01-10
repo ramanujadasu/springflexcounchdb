@@ -87,7 +87,7 @@ public class EmployeeDAO2 extends RcpRepository<Employee, String> implements IEm
 	}
 
 	public Mono<Employee> update(Employee empl) {
-
+		String id = empl.getId();
 		try {
 			System.out.println("Employee getting existing info: " + empl.getId());
 			Employee em = (Employee) findById(empl.getId()).toFuture().get();
@@ -96,9 +96,10 @@ public class EmployeeDAO2 extends RcpRepository<Employee, String> implements IEm
 		} catch (InterruptedException | ExecutionException ex) {
 			System.out.println("Exception: " + ex.getMessage());
 		}
+		empl.setId(null);
 		String body = CommonUtils.convertEntityToJsonObject(empl);
 		System.out.println("body: "+body);
-		return update(database, empl.getId(), body);
+		return update(database, id, body);
 	}
 
 	public Mono<Employee> delete(String id) {

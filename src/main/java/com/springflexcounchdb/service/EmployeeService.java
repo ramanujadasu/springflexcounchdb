@@ -94,7 +94,8 @@ public class EmployeeService implements IEmployeeService {
 	}
 
 	@Override
-	public Mono<EmployeeDTO> createDataBase(String database) {
-		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.createDataBase(database));
+	public Mono<String> createDataBase(String database) {
+		iEmployeeDAO.createDataBase(database);
+		return Mono.just("Database created Successfully.");
 	}
 }
