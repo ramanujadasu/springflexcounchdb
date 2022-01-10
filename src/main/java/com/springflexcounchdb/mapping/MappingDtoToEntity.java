@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springflexcounchdb.dto.AddressDTO;
 import com.springflexcounchdb.dto.EmployeeDTO;
 import com.springflexcounchdb.model.Address;
 import com.springflexcounchdb.model.Employee;
 
-import com.springflexcounchdb.model.EmployeeTemp;
-import net.minidev.json.JSONObject;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -49,9 +46,11 @@ public class MappingDtoToEntity {
 	public static List<AddressDTO> convertEmpoyeeToDTO(List<Address> list) {
 
 		List<AddressDTO> addressDTOList = new ArrayList<>();
-		list.forEach(address -> {
-			addressDTOList.add(new AddressDTO(address.getAddressId()));
-		});
+		if(list != null && !list.isEmpty()) {
+			list.forEach(address -> {
+				addressDTOList.add(new AddressDTO(address.getAddressId()));
+			});
+		}
 		return addressDTOList;
 	}
 

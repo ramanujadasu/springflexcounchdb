@@ -1,21 +1,22 @@
 package com.springflexcounchdb.dao;
 
-import com.springflexcounchdb.common.CouchDbOperationConstant;
-import com.springflexcounchdb.repository.CrudRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.time.Duration;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.springflexcounchdb.common.CouchDbOperationConstant;
+import com.springflexcounchdb.repository.CrudRepository;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
 
 public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 
     protected final Class<T> type;
     protected final WebClient webClient;
-    private Duration duration = Duration.ofMillis(10_000);
+    private Duration duration = Duration.ofMillis(5_000);
     private static final String SLASH = "/";
 
     public RcpRepository(Class<T> type, WebClient webClient) {
@@ -33,7 +34,7 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
     @Override
     public Mono<T> findById(String docName, ID id) {
         return webClient.get().uri(SLASH + docName + SLASH + id).retrieve()
-                .bodyToMono(this.type);
+                .bodyToMono(this.type).timeout(duration);
     }
 
     @Override
@@ -49,7 +50,11 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
     }
 
     @Override
-    public Mono<T> delet(String docName, String body) {
+    /**
+     * @param docName databaseName
+     * @param body body
+     */
+    public Mono<T> delete(String docName, String body) {
         return webClient.post().uri(SLASH + docName + CouchDbOperationConstant.DELETE).accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(body)).retrieve()
                 .bodyToMono(this.type).timeout(duration);

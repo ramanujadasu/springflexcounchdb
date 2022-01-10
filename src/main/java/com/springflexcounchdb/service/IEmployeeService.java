@@ -11,15 +11,15 @@ public interface IEmployeeService {
 
 	Flux<Employee> findAll();
 
-	Mono<Employee> findById(String id);
+	Mono<EmployeeDTO> findById(String id);
 
 	Flux<Employee> findByName(String name);
 
 	Mono<Employee> create(EmployeeDTO e);
 
-	Mono<Employee> update(EmployeeDTO e);
+	Mono<EmployeeDTO> update(EmployeeDTO e);
 
-	Mono<Employee> delete(String id, String revId);
+	Mono<EmployeeDTO> delete(String id);
 
 	Mono<Employee> findByProperties(SearchDTO searchDTO);
 
@@ -27,6 +27,6 @@ public interface IEmployeeService {
 	
 	Mono<Employee> findByProperties(String name, String addressId);
 
-	Mono<Employee> createDataBase(String database);
+	Mono<EmployeeDTO> createDataBase(String database);
 
 }

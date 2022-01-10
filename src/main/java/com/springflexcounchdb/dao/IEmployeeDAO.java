@@ -18,11 +18,9 @@ public interface IEmployeeDAO {
 	
 	Mono<Employee> createDataBase(String database);
 
-	Mono<Employee> updateDetails(Employee e);
-	
 	Mono<Employee> update(Employee e);
 
-	Mono<Employee> delete(String id, String revId);
+	Mono<Employee> delete(String id);
 
 	Mono<Employee> findByProperties(SearchDTO searchDTO);
 	

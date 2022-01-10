@@ -1,7 +1,6 @@
 package com.springflexcounchdb.service;
 
 import java.time.Instant;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,12 +25,12 @@ public class EmployeeService implements IEmployeeService {
 	public Flux<Employee> findAll() {
 		return iEmployeeDAO.findAll();
 	}
-	public   Long CREATED_DATE = Instant.EPOCH.getEpochSecond();
-	public   Long LAST_MODIFIED_DATE = Instant.EPOCH.getEpochSecond();
-	
-	
+
+	public Long CREATED_DATE = Instant.EPOCH.getEpochSecond();
+	public Long LAST_MODIFIED_DATE = Instant.EPOCH.getEpochSecond();
+
 	public Mono<Employee> create(EmployeeDTO empl) {
-		
+
 //		{
 //		    "ok": true,
 //		    "id": "1223",
@@ -51,10 +50,10 @@ public class EmployeeService implements IEmployeeService {
 //			e.printStackTrace();
 //			System.err.println("Error: "+ e.getMessage());
 //		}
-		
+
 //		Mono<Object> result = createDataBase("employee1341");
 //		System.out.println("Creating database result:"+result);
-		
+
 		Employee employee = MappingDtoToEntity.convertEmployeeEntity(empl);
 		employee.setCreatedBy(CommonUtils.CREATED_BY);
 		employee.setCreatedOn(CREATED_DATE);
@@ -68,29 +67,16 @@ public class EmployeeService implements IEmployeeService {
 		return iEmployeeDAO.findByName(name);
 	}
 
-	public Mono<Employee> findById(String id) {
-		return iEmployeeDAO.findById(id);
+	public Mono<EmployeeDTO> findById(String id) {
+		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.findById(id));
 	}
 
-	public Mono<Employee> update(EmployeeDTO e) {
-		String employeeRevId = null;
-		try {
-			System.out.println("Employee getting existing info: "+e.getId());
-			 Employee em = (Employee) iEmployeeDAO.findById(e.getId()).toFuture().get();
-			 employeeRevId = em.get_rev();
-			System.out.println("Employee employeeRevId: "+employeeRevId);
-		} catch (InterruptedException | ExecutionException ex) {
-			System.out.println("Exception: "+ex.getMessage());
-		}
-		Employee employee = MappingDtoToEntity.convertEmployeeEntity(e);
-		employee.set_rev(employeeRevId);
-		return iEmployeeDAO.update(employee);
+	public Mono<EmployeeDTO> update(EmployeeDTO e) {
+		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e)));
 	}
 
-	
-	public Mono<Employee> delete(String id, String revId) {
-		
-		return iEmployeeDAO.delete(id, revId);
+	public Mono<EmployeeDTO> delete(String id) {
+		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.delete(id));
 	}
 
 	public Mono<Employee> findByProperties(SearchDTO searchDTO) {
@@ -102,14 +88,13 @@ public class EmployeeService implements IEmployeeService {
 		return iEmployeeDAO.findByProperties(name, addressId);
 	}
 
-	
 	@Override
 	public Mono<Employee> findByProperties(String searchAsString) {
 		return iEmployeeDAO.findByProperties(searchAsString);
 	}
 
 	@Override
-	public Mono<Employee> createDataBase(String database) {
-		return iEmployeeDAO.createDataBase(database);
+	public Mono<EmployeeDTO> createDataBase(String database) {
+		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.createDataBase(database));
 	}
 }

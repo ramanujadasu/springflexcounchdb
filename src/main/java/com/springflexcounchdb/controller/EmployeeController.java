@@ -42,7 +42,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public Mono<Employee> findById(@PathVariable("id") String id) {
+	public Mono<EmployeeDTO> findById(@PathVariable("id") String id) {
 		return employeeService.findById(id);
 	}
 
@@ -97,33 +97,22 @@ public class EmployeeController {
 		return employeeService.create(employeeDTO);//Mono.just(new CommonResponse(object, "Given data inserted succesfully", HttpStatus.OK.value()));
 	}
 
-	@PutMapping(value = "/update2")
+	@PutMapping(value = "/update/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Employee> update2(@RequestBody EmployeeDTO employeeDTO,
-			@RequestParam(required = true, name = "id") String id,
-			@RequestParam(required = true, name = "rev_id") String revId) {
-		employeeDTO.setId(id);
-		// employeeDTO.setRev(revId);
-		return employeeService.update(employeeDTO);
-	}
-	
-	@PutMapping(value = "/update")
-	@ResponseStatus(HttpStatus.OK)
-	public Mono<Employee> update(@RequestBody EmployeeDTO employeeDTO,
-			@RequestParam(required = true, name = "id") String id) {
+	public Mono<EmployeeDTO> update(@RequestBody EmployeeDTO employeeDTO,
+			@PathVariable(required = true, name = "id") String id) {
 		employeeDTO.setId(id);
 		return employeeService.update(employeeDTO);
 	}
 
-	@DeleteMapping(value = "/delete")
+	@DeleteMapping(value = "/delete/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Employee> delete(@RequestParam(required = true, name = "id") String id,
-			@RequestParam(required = true, name = "rev_id") String revId) {
-		return employeeService.delete(id, revId);
+	public Mono<EmployeeDTO> delete(@PathVariable(required = true, name = "id") String id) {
+		return employeeService.delete(id);
 	}
 
 	@GetMapping(value = "/createDatabase/{database}")
-	public Mono<Employee> createDatabase(@PathVariable String database) {
+	public Mono<EmployeeDTO> createDatabase(@PathVariable String database) {
 		return employeeService.createDataBase(database);
 	}
 }
