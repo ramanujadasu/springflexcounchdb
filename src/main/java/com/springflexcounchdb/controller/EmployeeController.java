@@ -1,12 +1,11 @@
 package com.springflexcounchdb.controller;
 
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
+import com.springflexcounchdb.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springflexcounchdb.common.CommonResponse;
 import com.springflexcounchdb.dto.EmployeeDTO;
-import com.springflexcounchdb.mapping.MappingDtoToEntity;
 import com.springflexcounchdb.service.IEmployeeService;
 
 import reactor.core.publisher.Flux;
@@ -38,24 +35,24 @@ public class EmployeeController {
 
 	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Flux<Object> findAll() {
+	public Flux<Employee> findAll() {
 		return employeeService.findAll();
 		// return CommonUtils.convertResponse(employeeService.findAll(), message,
 		// HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{id}")
-	public Mono<EmployeeDTO> findById(@PathVariable("id") String id) {
+	public Mono<Employee> findById(@PathVariable("id") String id) {
 		return employeeService.findById(id);
 	}
 
 	@GetMapping(value = "/find-by-name/{name}")
-	public Flux<Object> findByName(@PathVariable("name") String name) {
+	public Flux<Employee> findByName(@PathVariable("name") String name) {
 		return employeeService.findByName(name);
 	}
 
 	@PostMapping(value = "/find2")
-	public Mono<Object> findByProperties2(@RequestBody Map<String, Object> searchAsString) {
+	public Mono<Employee> findByProperties2(@RequestBody Map<String, Object> searchAsString) {
 
 		// Do whatever with the json as String
 		System.out.println(searchAsString);
@@ -74,14 +71,14 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/find")
-	public Mono<Object> findByProperties(@RequestParam String name, @RequestParam String addressId) {
+	public Mono<Employee> findByProperties(@RequestParam String name, @RequestParam String addressId) {
 
 		System.out.println("Name: "+name +", addressId: "+ addressId);
 		return employeeService.findByProperties(name, addressId);
 	}
 	@PostMapping(value = "/create")
 	//public Mono<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {
-	public Mono<Object> create(@RequestBody EmployeeDTO employeeDTO) {
+	public Mono<Employee> create(@RequestBody EmployeeDTO employeeDTO) {
 //	public ResponseEntity<CommonResponse> create(@RequestBody EmployeeDTO employeeDTO) {	
 
 		//CommonResponse cr = new CommonResponse(employeeService.create(employeeDTO), "", HttpStatus.OK);
@@ -102,7 +99,7 @@ public class EmployeeController {
 
 	@PutMapping(value = "/update2")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Object> update2(@RequestBody EmployeeDTO employeeDTO,
+	public Mono<Employee> update2(@RequestBody EmployeeDTO employeeDTO,
 			@RequestParam(required = true, name = "id") String id,
 			@RequestParam(required = true, name = "rev_id") String revId) {
 		employeeDTO.setId(id);
@@ -112,7 +109,7 @@ public class EmployeeController {
 	
 	@PutMapping(value = "/update")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Object> update(@RequestBody EmployeeDTO employeeDTO,
+	public Mono<Employee> update(@RequestBody EmployeeDTO employeeDTO,
 			@RequestParam(required = true, name = "id") String id) {
 		employeeDTO.setId(id);
 		return employeeService.update(employeeDTO);
@@ -120,13 +117,13 @@ public class EmployeeController {
 
 	@DeleteMapping(value = "/delete")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Object> delete(@RequestParam(required = true, name = "id") String id,
+	public Mono<Employee> delete(@RequestParam(required = true, name = "id") String id,
 			@RequestParam(required = true, name = "rev_id") String revId) {
 		return employeeService.delete(id, revId);
 	}
 
 	@GetMapping(value = "/createDatabase/{database}")
-	public Mono<Object> createDatabase(@PathVariable String database) {
+	public Mono<Employee> createDatabase(@PathVariable String database) {
 		return employeeService.createDataBase(database);
 	}
 }

@@ -3,29 +3,30 @@ package com.springflexcounchdb.service;
 import com.springflexcounchdb.dto.EmployeeDTO;
 import com.springflexcounchdb.dto.SearchDTO;
 
+import com.springflexcounchdb.model.Employee;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IEmployeeService {
 
-	Flux<Object> findAll();
+	Flux<Employee> findAll();
 
-	Mono<EmployeeDTO> findById(String id);
+	Mono<Employee> findById(String id);
 
-	Flux<Object> findByName(String name);
+	Flux<Employee> findByName(String name);
 
-	Mono<Object> create(EmployeeDTO e);
+	Mono<Employee> create(EmployeeDTO e);
 
-	Mono<Object> update(EmployeeDTO e);
+	Mono<Employee> update(EmployeeDTO e);
 
-	Mono<Object> delete(String id, String revId);
+	Mono<Employee> delete(String id, String revId);
 
-	Mono<Object> findByProperties(SearchDTO searchDTO);
+	Mono<Employee> findByProperties(SearchDTO searchDTO);
 
-	Mono<Object> findByProperties(String searchAsString);
+	Mono<Employee> findByProperties(String searchAsString);
 	
-	Mono<Object> findByProperties(String name, String addressId);
+	Mono<Employee> findByProperties(String name, String addressId);
 
-	Mono<Object> createDataBase(String database);
+	Mono<Employee> createDataBase(String database);
 
 }
