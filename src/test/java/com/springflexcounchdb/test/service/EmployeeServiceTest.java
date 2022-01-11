@@ -33,21 +33,19 @@ public class EmployeeServiceTest {
 	private EmployeeService employeeService;
 	
 	@MockBean
-	@Qualifier("employeeDAO2")
+	@Qualifier("employeeDAO")
 	private IEmployeeDAO employeeDAO;
 	
 	@Test
 	public void createEmployeeTest() {
 
 		List<AddressDTO> addressDTOList= new ArrayList<>(); 
-		addressDTOList.add(new AddressDTO("address"));
+		addressDTOList.add(new com.springflexcounchdb.dto.AddressDTO("address"));
 		List<Address> addressList= new ArrayList<>(); 
-		addressList.add(new Address("address"));
-		EmployeeDTO employeeDTO= new EmployeeDTO("1", "1", "1-1234", "Test-Employee", 20, addressDTOList);
+		addressList.add(new com.springflexcounchdb.model.Address("address"));
+		com.springflexcounchdb.dto.EmployeeDTO employeeDTO= new com.springflexcounchdb.dto.EmployeeDTO("1", "1", "1-1234", "Test-Employee", 20, addressDTOList);
 		
-		Employee employee = new Employee("1", "1", "1-1234", "Test-Employee", 20, addressList);
-		
-		Mono<Employee> monoEmployee = Mono.just(employee);
+		com.springflexcounchdb.model.Employee employee = new com.springflexcounchdb.model.Employee("1", "1", "1-1234", "Test-Employee", 20, addressList);
 		
 		when(employeeDAO.create(employee).thenReturn(Mono.just("1")));
 		Mono<String> responseEmployee  = employeeService.create(employeeDTO);
@@ -130,18 +128,13 @@ public class EmployeeServiceTest {
 		addressList.add(new Address("address"));
 		
 		//EmployeeDTO employeeDTO =  new EmployeeDTO("1", "1", "1-1234", "Test-Employee", 21, addressDTOList);
-		Employee employee = new Employee("1", "1", "1-1234", "Test-Employee", 21, addressList);
-		Mono<Employee> monoEmployee = Mono.just(employee);
+		//Employee employee = new Employee("1", "1", "1-1234", "Test-Employee", 21, addressList);
+		Mono<Void> monoEmployee = null ;
 		
-//		when(employeeDAO.delete("12")).thenReturn(monoEmployee);
-//		Mono<EmployeeDTO> employeeDTO = employeeService.delete("12");
-//		
-//		try {
-//			assertEquals(employeeDTO.toFuture().get().getId(), employeeDTO.toFuture().get().getId());
-//		} catch (InterruptedException | ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		when(employeeDAO.delete("12")).thenReturn(monoEmployee);
+		Mono<Void> employeeDTO = employeeService.delete("12");
+		
+		assertEquals(monoEmployee, employeeDTO);
 		
 	}
 }
