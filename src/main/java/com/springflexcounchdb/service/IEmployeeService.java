@@ -15,7 +15,8 @@ public interface IEmployeeService {
 
 	Flux<Employee> findByName(String name);
 
-	Mono<Employee> create(EmployeeDTO e);
+	//Mono<Employee> create(EmployeeDTO e);
+	Mono<String> create(EmployeeDTO e);
 
 	Mono<EmployeeDTO> update(EmployeeDTO e);
 

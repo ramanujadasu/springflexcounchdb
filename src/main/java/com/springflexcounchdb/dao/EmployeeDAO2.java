@@ -29,13 +29,15 @@ public class EmployeeDAO2 extends RcpRepository<Employee, String> implements IEm
 	}
 
 	public Flux<Employee> findAll() {
-		return null;
-		// return findAll(database);
+		//return null;
+		 return findAll(database);
 		// return
 		// webClient.get().uri("/"+database+"/_all_docs").retrieve().bodyToFlux(Object.class).timeout(duration);
 	}
 
-	public Mono<Employee> create(Employee empl) {
+	//public Mono<Employee> create(Employee empl) {
+	public Mono<String> create(Employee empl) {
+
 
 //		String body = "{\"id\":\"" + empl.get_id() + "\",\"name\":\"" + empl.getName() + "\",\"age\":" + empl.getAge()
 //				+ ",\"createTime\":\"" + empl.getCreateTime() + "\"}";

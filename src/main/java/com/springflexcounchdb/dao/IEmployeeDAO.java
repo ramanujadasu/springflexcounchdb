@@ -14,7 +14,8 @@ public interface IEmployeeDAO {
 
 	Flux<Employee> findByName(String name);
 
-	Mono<Employee> create(Employee e);
+	//Mono<Employee> create(Employee e);
+	Mono<String> create(Employee e);
 	
 	Mono<Employee> createDataBase(String database);
 
