@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.springflexcounchdb.common.CommonUtils;
 import com.springflexcounchdb.common.CouchDbOperationConstant;
 
 import reactor.core.publisher.Flux;
@@ -54,12 +55,23 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 
 	public Mono<T> update(String docName, ID id, String body) {
 		System.out.println("body2: "+ body);
+
+		
+//		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(JsonNode.class).timeout(duration)
+//				.map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("_rev")))
+//				.zipWhen(revId ->
+//					webClient.put().uri(SLASH + docName + SLASH + id).accept(MediaType.APPLICATION_JSON)
+//						.body(BodyInserters.fromObject(body.substring(0, body.length()-1)+",\"_rev\": " + revId + "}")).retrieve()
+//						.bodyToMono(this.type).timeout(duration), (revId, secondResponse) -> secondResponse
+//				);
+		
+		
 		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(JsonNode.class).timeout(duration)
-				.map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("_rev")))
-				.zipWhen(revId ->
+				//.map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("_rev")))
+				.zipWhen(existingObject ->
 					webClient.put().uri(SLASH + docName + SLASH + id).accept(MediaType.APPLICATION_JSON)
-						.body(BodyInserters.fromObject(body.substring(0, body.length()-1)+",\"_rev\": " + revId + "}")).retrieve()
-						.bodyToMono(this.type).timeout(duration), (revId, secondResponse) -> secondResponse
+						.body(BodyInserters.fromObject(CommonUtils.updateValues(body, existingObject))).retrieve()
+						.bodyToMono(this.type).timeout(duration), (existingObject, secondResponse) -> secondResponse
 				);
 		
 //		return webClient.put().uri(SLASH + docName + SLASH + id).accept(MediaType.APPLICATION_JSON)
