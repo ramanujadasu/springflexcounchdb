@@ -3,13 +3,12 @@ package com.springflexcounchdb.repository;
 import java.time.Duration;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.springflexcounchdb.common.CouchDbOperationConstant;
-import com.springflexcounchdb.model.Employee;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -54,8 +53,17 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 	}
 
 	public Mono<T> update(String docName, ID id, String body) {
-		return webClient.put().uri(SLASH + docName + SLASH + id).accept(MediaType.APPLICATION_JSON)
-				.body(BodyInserters.fromObject(body)).retrieve().bodyToMono(this.type).timeout(duration);
+		System.out.println("body2: "+ body);
+		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(JsonNode.class).timeout(duration)
+				.map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("_rev")))
+				.zipWhen(revId ->
+					webClient.put().uri(SLASH + docName + SLASH + id).accept(MediaType.APPLICATION_JSON)
+						.body(BodyInserters.fromObject(body.substring(0, body.length()-1)+",\"_rev\": " + revId + "}")).retrieve()
+						.bodyToMono(this.type).timeout(duration), (revId, secondResponse) -> secondResponse
+				);
+		
+//		return webClient.put().uri(SLASH + docName + SLASH + id).accept(MediaType.APPLICATION_JSON)
+//				.body(BodyInserters.fromObject(body)).retrieve().bodyToMono(this.type).timeout(duration);
 	}
 
 	@Override
@@ -67,12 +75,13 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 //        return webClient.post().uri(SLASH + docName + CouchDbOperationConstant.DELETE).accept(MediaType.APPLICATION_JSON)
 //                .body(BodyInserters.fromObject(body)).retrieve()
 //                .bodyToMono(Void.class).timeout(duration);
-		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(Employee.class).timeout(duration)
-				.zipWhen(firstResponse ->
+		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(JsonNode.class).timeout(duration)
+				.map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("_rev")))
+				.zipWhen(revId ->
 				webClient.post().uri(SLASH + docName + CouchDbOperationConstant.DELETE)
 						.accept(MediaType.APPLICATION_JSON)
-						.body(BodyInserters.fromObject("{\"" + id + "\": [\"" + firstResponse.get_rev() + "\"]}")).retrieve()
-						.bodyToMono(Void.class).timeout(duration), (firstResponse, secondResponse) -> secondResponse
+						.body(BodyInserters.fromObject("{\"" + id + "\": [" + revId + "]}")).retrieve()
+						.bodyToMono(Void.class).timeout(duration), (revId, secondResponse) -> secondResponse
 				);
 
 //		return webClient.post().uri(SLASH + docName + CouchDbOperationConstant.DELETE)

@@ -89,15 +89,15 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 
 	public Mono<Employee> update(Employee empl) {
 		String id = empl.getId();
-		try {
-			System.out.println("Employee getting existing info: " + empl.getId());
-			Employee em = (Employee) findById(empl.getId()).toFuture().get();
-			empl.set_rev(em.get_rev());
-			System.out.println("Employee employeeRevId: " + em.get_rev());
-		} catch (InterruptedException | ExecutionException ex) {
-			System.out.println("Exception: " + ex.getMessage());
-		}
-		empl.setId(null);
+//		try {
+//			System.out.println("Employee getting existing info: " + empl.getId());
+//			Employee em = (Employee) findById(empl.getId()).toFuture().get();
+//			empl.set_rev(em.get_rev());
+//			System.out.println("Employee employeeRevId: " + em.get_rev());
+//		} catch (InterruptedException | ExecutionException ex) {
+//			System.out.println("Exception: " + ex.getMessage());
+//		}
+//		empl.setId(null);
 		String body = CommonUtils.convertEntityToJsonObject(empl);
 		System.out.println("body: " + body);
 		return update(database, id, body);
@@ -105,17 +105,17 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 
 	public Mono<Void> delete(String id) {
 
-		String revId = null;
-		try {
-			System.out.println("Employee getting existing info: " + id);
-			Employee em = (Employee) findById(id).toFuture().get();
-			revId = em.get_rev();
-			System.out.println("Employee employeeRevId: " + em.get_rev());
-		} catch (Exception ex) {
-			System.out.println("Exception: " + ex.getMessage());
-		}
-		String body = "{\"" + id + "\": [\"" + revId + "\"]}";
-		System.out.println("body: "+body);
+//		String revId = null;
+//		try {
+//			System.out.println("Employee getting existing info: " + id);
+//			Employee em = (Employee) findById(id).toFuture().get();
+//			revId = em.get_rev();
+//			System.out.println("Employee employeeRevId: " + em.get_rev());
+//		} catch (Exception ex) {
+//			System.out.println("Exception: " + ex.getMessage());
+//		}
+//		String body = "{\"" + id + "\": [\"" + revId + "\"]}";
+//		System.out.println("body: "+body);
 
 		
 		//try 1	

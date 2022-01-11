@@ -7,4 +7,5 @@ public class CouchDbOperationConstant {
     public static final String DELETE = "/_purge";
     public static final String ID_IN_JSON_FORMAT = "{\"_id\":%s}";
     public static final String REV_KEY_VAL = "\"_rev\":%s";
+    public static final String REV_VAL = "%s";
 }
