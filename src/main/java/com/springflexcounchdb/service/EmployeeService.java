@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class EmployeeService implements IEmployeeService {
 	@Autowired
-	@Qualifier("employeeDAO2")
+	@Qualifier("employeeDAO")
 	IEmployeeDAO iEmployeeDAO;
 
 	public Flux<Employee> findAll() {
@@ -76,8 +76,11 @@ public class EmployeeService implements IEmployeeService {
 		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e)));
 	}
 
-	public Mono<EmployeeDTO> delete(String id) {
-		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.delete(id));
+	public Mono<Void> delete(String id) {
+		System.out.println("service delete");
+		Mono<Void> deleteResult = iEmployeeDAO.delete(id);
+		System.out.println("Deleted document successfully.");
+		return deleteResult;
 	}
 
 	public Mono<Employee> findByProperties(SearchDTO searchDTO) {

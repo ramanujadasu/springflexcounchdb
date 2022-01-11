@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateResponseDTO {
 
-	private String scanAvailable;
+	private String id;
 
 }

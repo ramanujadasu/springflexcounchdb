@@ -1,6 +1,5 @@
-package com.springflexcounchdb.dao;
+package com.springflexcounchdb.repository;
 
-import com.springflexcounchdb.repository.bkp_CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;

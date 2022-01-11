@@ -35,12 +35,12 @@ public class EmployeeController {
 
 	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Flux<ResponseEntity<?>> findAll() {
-		Flux<ResponseEntity<?>> response = null;
+	public ResponseEntity<Flux<Employee>> findAll() {
+		ResponseEntity<Flux<Employee>> response = null;
 		try {
-			response = Flux.just(new ResponseEntity<>(employeeService.findAll(), HttpStatus.OK));
+			response = new ResponseEntity<Flux<Employee>>(employeeService.findAll(), HttpStatus.OK);
 		} catch (Exception ex) {
-			return Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+			return new ResponseEntity<Flux<Employee>>(HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
 		return response;
 	}
@@ -51,37 +51,37 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/find-by-name/{name}")
-	public Flux<ResponseEntity<?>> findByName(@PathVariable("name") String name) {
-		Flux<ResponseEntity<?>> response = null;
+	public ResponseEntity<Flux<Employee>> findByName(@PathVariable("name") String name) {
+		ResponseEntity<Flux<Employee>> response = null;
 		try {
-			response = Flux.just(new ResponseEntity<>(employeeService.findByName(name), HttpStatus.OK));
+			response = new ResponseEntity<Flux<Employee>>(employeeService.findByName(name), HttpStatus.OK);
 		} catch (Exception ex) {
-			return Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+			return new ResponseEntity<Flux<Employee>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
 
 	@PostMapping(value = "/create")
-	public Mono<ResponseEntity<?>> create(@RequestBody EmployeeDTO employeeDTO) {
-		Mono<ResponseEntity<?>> response = null;
+	public ResponseEntity<Mono<String>> create(@RequestBody EmployeeDTO employeeDTO) {
+		ResponseEntity<Mono<String>> response = null;
 		try {
-			response = Mono.just(new ResponseEntity<>(employeeService.create(employeeDTO), HttpStatus.OK));
+			response = new ResponseEntity<Mono<String>>(employeeService.create(employeeDTO), HttpStatus.OK);
 		} catch (Exception ex) {
-			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+			return new ResponseEntity<Mono<String>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
 
 	@PutMapping(value = "/update/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<ResponseEntity<?>> update(@RequestBody EmployeeDTO employeeDTO,
+	public ResponseEntity<Mono<EmployeeDTO>> update(@RequestBody EmployeeDTO employeeDTO,
 			@PathVariable(required = true, name = "id") String id) {
 		employeeDTO.setId(id);
-		Mono<ResponseEntity<?>> response = null;
+		ResponseEntity<Mono<EmployeeDTO>> response = null;
 		try {
-			response = Mono.just(new ResponseEntity<>(employeeService.update(employeeDTO), HttpStatus.OK));
+			response = new ResponseEntity<Mono<EmployeeDTO>>(employeeService.update(employeeDTO), HttpStatus.OK);
 		} catch (Exception ex) {
-			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+			return new ResponseEntity<Mono<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
@@ -99,20 +99,20 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/createDatabase/{database}")
-	public Mono<ResponseEntity<?>> createDatabase(@PathVariable String database) {
-		Mono<ResponseEntity<?>> response = null;
+	public ResponseEntity<Mono<String>> createDatabase(@PathVariable String database) {
+		ResponseEntity<Mono<String>> response = null;
 		try {
-			response = Mono.just(new ResponseEntity<>(employeeService.createDataBase(database), HttpStatus.CREATED));
+			response = new ResponseEntity<Mono<String>>(employeeService.createDataBase(database), HttpStatus.CREATED);
 //		} //catch (DuplicateDataException excep) {
 //			return Mono.error(new ResponseStatusException(HttpStatus.CONFLICT,
 //					Constant.FIELD_NAME + excep.getRejectedValue(), excep));
 		} catch (Exception ex) {
-			return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+			return new ResponseEntity<Mono<String>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
 
-	@PostMapping(value = "/find2")
+	@PostMapping(value = "/find-by-properties")
 	public Mono<Employee> findByProperties2(@RequestBody Map<String, Object> searchAsString) {
 
 		// Do whatever with the json as String
@@ -132,7 +132,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/find")
-	public Mono<Employee> findByProperties(@RequestParam String name, @RequestParam String addressId) {
+	public Mono<Employee> find(@RequestParam String name, @RequestParam String addressId) {
 
 		System.out.println("Name: " + name + ", addressId: " + addressId);
 		return employeeService.findByProperties(name, addressId);

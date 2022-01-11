@@ -21,7 +21,7 @@ public interface IEmployeeDAO {
 
 	Mono<Employee> update(Employee e);
 
-	Mono<Employee> delete(String id);
+	Mono<Void> delete(String id);
 
 	Mono<Employee> findByProperties(SearchDTO searchDTO);
 	

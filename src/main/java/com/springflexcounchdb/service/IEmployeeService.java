@@ -20,7 +20,7 @@ public interface IEmployeeService {
 
 	Mono<EmployeeDTO> update(EmployeeDTO e);
 
-	Mono<EmployeeDTO> delete(String id);
+	Mono<Void> delete(String id);
 
 	Mono<Employee> findByProperties(SearchDTO searchDTO);
 
