@@ -77,7 +77,7 @@ public class EmployeeController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Mono<EmployeeDTO>> update(@RequestBody EmployeeDTO employeeDTO,
 			@PathVariable(required = true, name = "id") String id) {
-		employeeDTO.setId(id);
+		employeeDTO.setCouchDbID(id);
 		ResponseEntity<Mono<EmployeeDTO>> response = null;
 		try {
 			response = new ResponseEntity<Mono<EmployeeDTO>>(employeeService.update(employeeDTO), HttpStatus.OK);
@@ -91,7 +91,7 @@ public class EmployeeController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Mono<EmployeeDTO>> patch(@RequestBody EmployeeDTO employeeDTO,
 			@PathVariable(required = true, name = "id") String id) {
-		employeeDTO.setId(id);
+		employeeDTO.setCouchDbID(id);
 		ResponseEntity<Mono<EmployeeDTO>> response = null;
 		try {
 			response = new ResponseEntity<Mono<EmployeeDTO>>(employeeService.patch(employeeDTO), HttpStatus.OK);

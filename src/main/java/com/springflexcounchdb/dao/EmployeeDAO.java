@@ -106,10 +106,10 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 
 	
 	public Mono<Employee> patch(Employee empl) {
-		String id = empl.getId();
+		String id = empl.getCouchDbID();
 		String body = CommonUtils.convertEntityToJsonObject(empl);
 		System.out.println("body: " + body);
-		return update(database, id, body);
+		return patch(database, id, body);
 	}
 	
 	public Mono<Void> delete(String id) {

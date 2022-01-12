@@ -3,6 +3,8 @@ package com.springflexcounchdb.common;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -55,7 +57,15 @@ public class CommonUtils {
 			newObjectNode.put("id", objectUpdateBodyNode.get("id"));
 			newObjectNode.put("age", objectUpdateBodyNode.get("age"));
 			//TODO
-			ArrayNode nodeAddress = (ArrayNode) objectUpdateBodyNode.get("address");
+			ArrayNode nodeAddress = mapper.createArrayNode();
+			for(JsonNode node : objectUpdateBodyNode.get("address")) {
+				//JsonNode addNode = mapper.createObjectNode();
+				//addNode = node.get("addressId");
+				ObjectNode obj = mapper.createObjectNode();
+				obj.put("addressId", node.get("addressId"));
+				nodeAddress.add(obj);
+			}
+			newObjectNode.put("address", nodeAddress);
 			//((ObjectNode)jsonNode).putArray("address").add(object.ge‌​tValue());
 			//ArrayNode objectNodeAddress = (ArrayNode) nodeAddress;
 			
