@@ -1,6 +1,10 @@
-# Spring Reactive
+# Spring Reactive With CouchDB Integration Project Using Webclient
 
-Tutorials related to this project:
+Steps to configure this project:
 
-1. [Spring WebClient Tutorial](https://howtodoinjava.com/spring-webflux/webclient-get-post-example/)
-2. [Spring WebClient – How to set timeouts](https://howtodoinjava.com/spring-webflux/webclient-set-timeouts/)
+	1.	Need to download couchdb instance and install. Verify installation url: http://127.0.0.1:5984/_utils/#
+	2.	Need any IDE like eclipse or IntelliJ
+	3.	Import this project and modify bellow couchdb properties in applicaiton.yml file
+			counchdb.user, couchdb.password, couchdb.url
+	4.	Create the couchdb database in the couchdb http url (database should be: employees)
+	5.	Import the postman apis from docs folder

@@ -1,0 +1,388 @@
+{
+	"info": {
+		"_postman_id": "0eb0e3fb-26e3-4ccd-bba8-1893cab7bdd2",
+		"name": "SpringWebflexWithClient",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Fine By Properties",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/find?name=test1234564&addressId=Address123414",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"find"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "test1234564"
+						},
+						{
+							"key": "addressId",
+							"value": "Address123414"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fine By Name",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/find-by-name/test1234561",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"find-by-name",
+						"test1234561"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FindByID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/ebdf701150bf17ab35a1d5bdff017b2b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"ebdf701150bf17ab35a1d5bdff017b2b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/delete/ebdf701150bf17ab35a1d5bdff004885",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"delete",
+						"ebdf701150bf17ab35a1d5bdff004885"
+					],
+					"query": [
+						{
+							"key": "rev_id",
+							"value": "5-4e5d8d1821e613e9cc7dd02c19b77d90",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"Test8_Update12\",\n    \"name\": \"test8_Update12\",\n    \"age\": 12,\n    \"address\": [\n        {\n            \"addressId\": \"Address4_update13\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/update/ebdf701150bf17ab35a1d5bdff017242",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"update",
+						"ebdf701150bf17ab35a1d5bdff017242"
+					],
+					"query": [
+						{
+							"key": "rev_id",
+							"value": "4-d7a35be2c7cddbbf624463fbcc5abf26",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"Test7_Update\",\n    \"name\": \"test7_Update\",\n    \"age\": 17,\n    \"address\": [\n        {\n            \"addressId\": \"Address7_update\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/patch/ebdf701150bf17ab35a1d5bdff017b2b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"patch",
+						"ebdf701150bf17ab35a1d5bdff017b2b"
+					],
+					"query": [
+						{
+							"key": "rev_id",
+							"value": "4-d7a35be2c7cddbbf624463fbcc5abf26",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"Test73\",\n    \"name\": \"test73\",\n    \"age\": 16,\n    \"address\": [\n        {\n            \"addressId\": \"Address6\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find By Properties",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"selector\": {\n        \"name\": {\"$eq\": \"test1234561\"},\n        \"age\": {\"$gt\": 20}\n    },\n    \"fields\": [ \"name\", \"age\"],\n    \"limit\": 2,\n    \"skip\": 0,\n    \"execution_stats\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/find2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"find2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Database",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9192/employees/createDatabase/demo12431",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9192",
+					"path": [
+						"employees",
+						"createDatabase",
+						"demo12431"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "database",
+			"value": "newdatabase"
+		}
+	]
+}
