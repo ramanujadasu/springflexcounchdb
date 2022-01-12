@@ -1,7 +1,6 @@
 package com.springflexcounchdb.dao;
 
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.springflexcounchdb.common.CommonUtils;
+import com.springflexcounchdb.common.CouchDbOperationConstant;
 import com.springflexcounchdb.dto.SearchDTO;
 import com.springflexcounchdb.model.Employee;
 import com.springflexcounchdb.repository.RcpRepository;
@@ -103,6 +104,14 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 		return update(database, id, body);
 	}
 
+	
+	public Mono<Employee> patch(Employee empl) {
+		String id = empl.getId();
+		String body = CommonUtils.convertEntityToJsonObject(empl);
+		System.out.println("body: " + body);
+		return update(database, id, body);
+	}
+	
 	public Mono<Void> delete(String id) {
 
 //		String revId = null;
@@ -187,10 +196,10 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 	}
 
 	@Override
-	public Mono<Employee> createDataBase(String database) {
+	public Mono<String> createDataBase(String database) {
 
 		return webClient.put().uri("/" + database).accept(MediaType.APPLICATION_JSON).retrieve()
-				.bodyToMono(Employee.class);
+				.bodyToMono(JsonNode.class).map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("ok")));
 	}
 
 }

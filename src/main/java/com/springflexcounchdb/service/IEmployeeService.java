@@ -19,6 +19,8 @@ public interface IEmployeeService {
 	Mono<String> create(EmployeeDTO e);
 
 	Mono<EmployeeDTO> update(EmployeeDTO e);
+	
+	Mono<EmployeeDTO> patch(EmployeeDTO e);
 
 	Mono<Void> delete(String id);
 

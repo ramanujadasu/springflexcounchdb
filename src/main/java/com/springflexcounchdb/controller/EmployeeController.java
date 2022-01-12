@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -85,6 +86,21 @@ public class EmployeeController {
 		}
 		return response;
 	}
+	
+	@PatchMapping(value = "/patch/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Mono<EmployeeDTO>> patch(@RequestBody EmployeeDTO employeeDTO,
+			@PathVariable(required = true, name = "id") String id) {
+		employeeDTO.setId(id);
+		ResponseEntity<Mono<EmployeeDTO>> response = null;
+		try {
+			response = new ResponseEntity<Mono<EmployeeDTO>>(employeeService.patch(employeeDTO), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Mono<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+	
 
 	@DeleteMapping(value = "/delete/{id}")
 	@ResponseStatus(HttpStatus.OK)

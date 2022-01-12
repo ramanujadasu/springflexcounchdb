@@ -69,13 +69,24 @@ public class EmployeeService implements IEmployeeService {
 	}
 
 	public Mono<EmployeeDTO> findById(String id) {
+		
+		
 		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.findById(id));
 	}
 
 	public Mono<EmployeeDTO> update(EmployeeDTO e) {
+		
+		///iEmployeeDAO.findById(e.getId()).zipWhen(e.getId() ->  iEmployeeDAO.update(null), (e.getId(), r));
+		
+		
 		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e)));
 	}
 
+	public Mono<EmployeeDTO> patch(EmployeeDTO e) {
+		
+		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.patch(MappingDtoToEntity.convertEmployeeEntity(e)));
+	}
+	
 	public Mono<Void> delete(String id) {
 		System.out.println("service delete");
 		Mono<Void> deleteResult = iEmployeeDAO.delete(id);
@@ -99,7 +110,7 @@ public class EmployeeService implements IEmployeeService {
 
 	@Override
 	public Mono<String> createDataBase(String database) {
-		iEmployeeDAO.createDataBase(database);
-		return Mono.just("Database created Successfully.");
+		
+		return iEmployeeDAO.createDataBase(database);
 	}
 }
