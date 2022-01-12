@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CommonUtils {
@@ -59,7 +58,8 @@ public class CommonUtils {
 			ArrayNode nodeAddress = (ArrayNode) objectUpdateBodyNode.get("address");
 			//((ObjectNode)jsonNode).putArray("address").add(object.ge‌​tValue());
 			//ArrayNode objectNodeAddress = (ArrayNode) nodeAddress;
-			//newObjectNode.put("address", objectNodeAddress);
+			
+			//newObjectNode.put("address", null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,4 +74,21 @@ public class CommonUtils {
 		//REF: https://stackoverflow.com/questions/30997362/how-to-modify-jsonnode-in-java
 		return convertEntityToJsonObject(newObjectNode);
 	}
+	
+//	public static ArrayList<Object> convert(JSONArray jArr)
+//    {
+//        ArrayList<Object> list = new ArrayList<Object>();
+//        try {
+//            for (int i=0, l=jArr.length(); i<l; i++){
+//                 list.add(jArr.get(i));
+//            }
+//        } catch (JSONException e) {}
+//
+//        return list;
+//    }
+//
+//    public static JSONArray convert(Collection<Object> list)
+//    {
+//        return new JSONArray(list);
+//    }
 }

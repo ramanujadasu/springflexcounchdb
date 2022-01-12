@@ -20,6 +20,8 @@ public interface IEmployeeDAO {
 	Mono<String> createDataBase(String database);
 
 	Mono<Employee> update(Employee e);
+	
+	Mono<Employee> patch(Employee e);
 
 	Mono<Void> delete(String id);
 
