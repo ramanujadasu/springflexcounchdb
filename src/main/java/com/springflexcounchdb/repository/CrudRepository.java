@@ -16,6 +16,7 @@ public interface CrudRepository<T, ID> {
 	// TODO
 	Mono<T> update(String database, ID id, String body);
 
-	// TODO
 	Mono<Void> delete(String database, String body);
+	
+	Mono<String> createGivenDatabase(String database);
 }

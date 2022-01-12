@@ -1,10 +1,9 @@
 package com.springflexcounchdb.common;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,8 +14,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class CommonUtils {
 
 	public static final String CREATED_BY = getUsername();
-
 	public static final String LAST_MODIFIED_BY = getUsername();
+	public static String CREATED_DATE = Instant.now().toString();
+	public static String LAST_MODIFIED_DATE = Instant.now().toString();
 
 	public static String getLocalTime() {
 		LocalDateTime datetime1 = LocalDateTime.now();
@@ -51,8 +51,7 @@ public class CommonUtils {
 		try {
 			JsonNode updateBodyNode = mapper.readTree(updateBody); 
 			ObjectNode objectUpdateBodyNode = (ObjectNode) updateBodyNode;
-			//JsonNode newBodyNode = mapper.readTree(newBody);
-			 newObjectNode = (ObjectNode) newBody;
+			newObjectNode = (ObjectNode) newBody;
 			newObjectNode.put("name", objectUpdateBodyNode.get("name"));
 			newObjectNode.put("id", objectUpdateBodyNode.get("id"));
 			newObjectNode.put("age", objectUpdateBodyNode.get("age"));
@@ -66,39 +65,10 @@ public class CommonUtils {
 				nodeAddress.add(obj);
 			}
 			newObjectNode.put("address", nodeAddress);
-			//((ObjectNode)jsonNode).putArray("address").add(object.ge‌​tValue());
-			//ArrayNode objectNodeAddress = (ArrayNode) nodeAddress;
-			
-			//newObjectNode.put("address", null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			System.err.println("Exception: "+e.getMessage());
 		} 
-		//newObjectNode.put("", objectUpdateBodyNode.get(""));
-//		JsonNode nodeParent = someNode.get("NodeA")
-//                .get("Node1");
-//
-//		// Manually modify value of 'subfield', can only be done using the parent.
-//		((ObjectNode) nodeParent).put('subfield', "my-new-value-here");
-		//REF: https://stackoverflow.com/questions/30997362/how-to-modify-jsonnode-in-java
 		return convertEntityToJsonObject(newObjectNode);
 	}
 	
-//	public static ArrayList<Object> convert(JSONArray jArr)
-//    {
-//        ArrayList<Object> list = new ArrayList<Object>();
-//        try {
-//            for (int i=0, l=jArr.length(); i<l; i++){
-//                 list.add(jArr.get(i));
-//            }
-//        } catch (JSONException e) {}
-//
-//        return list;
-//    }
-//
-//    public static JSONArray convert(Collection<Object> list)
-//    {
-//        return new JSONArray(list);
-//    }
 }

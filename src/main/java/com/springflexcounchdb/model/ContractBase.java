@@ -20,9 +20,9 @@ import lombok.experimental.SuperBuilder;
 public class ContractBase {
 
     private String createdBy;
-    private Long createdOn;
+    private String createdOn;
     private String lastModifiedBy;
-    private Long lastModifiedOn;
+    private String lastModifiedOn;
     @Min(0)
     @Max(1)
     private Short status;

@@ -69,7 +69,7 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 	}
 
 	public Mono<T> patch(String docName, ID id, String body) {
-		System.out.println("patch body2: "+ body);
+		System.out.println("patch body2: "+ body); 
 		
 		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(JsonNode.class).timeout(duration)
 				.zipWhen(existingObject ->
@@ -108,5 +108,11 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 		return (Flux<T>) webClient.post().uri(SLASH + docName + CouchDbOperationConstant.FIND)
 				.accept(MediaType.APPLICATION_JSON).body(BodyInserters.fromObject(body)).retrieve()
 				.bodyToFlux(JsonNode.class).flatMapIterable(jsonNode -> jsonNode.get("docs"));
+	}
+
+	@Override
+	public Mono<String> createGivenDatabase(String docName) {
+		return webClient.put().uri(SLASH + docName).accept(MediaType.APPLICATION_JSON).retrieve()
+				.bodyToMono(JsonNode.class).map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("ok")));
 	}
 }

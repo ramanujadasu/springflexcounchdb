@@ -62,7 +62,7 @@ public class EmployeeController {
 		return response;
 	}
 
-	@PostMapping(value = "/create")
+	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Mono<String>> create(@RequestBody EmployeeDTO employeeDTO) {
 		ResponseEntity<Mono<String>> response = null;
 		try {

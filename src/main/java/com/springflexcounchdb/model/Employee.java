@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
+
 @Getter
 @Setter
 public class Employee extends ContractBase {
@@ -25,5 +25,34 @@ public class Employee extends ContractBase {
 	private String name;
 	private Integer age;
 	private List<Address> address;
+
+	public Employee(ContractBaseBuilder<?, ?> b) {
+		super(b);
+		// TODO Auto-generated constructor stub
+	}
+
+	public Employee(String createdBy, String createdOn, String lastModifiedBy, String lastModifiedOn, Short status) {
+		super(createdBy, createdOn, lastModifiedBy, lastModifiedOn, status);
+	}
+
+	public Employee(ContractBaseBuilder<?, ?> b, String couchDbID, String id, String _rev, String name, Integer age,
+			List<Address> address) {
+		super(b);
+		this.couchDbID = couchDbID;
+		this.id = id;
+		this._rev = _rev;
+		this.name = name;
+		this.age = age;
+		this.address = address;
+	}
+
+	public Employee(String couchDbID, String id, String _rev, String name, Integer age, List<Address> address) {
+		this.couchDbID = couchDbID;
+		this.id = id;
+		this._rev = _rev;
+		this.name = name;
+		this.age = age;
+		this.address = address;
+	}
 
 }

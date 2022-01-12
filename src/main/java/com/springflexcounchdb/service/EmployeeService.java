@@ -26,8 +26,7 @@ public class EmployeeService implements IEmployeeService {
 		return iEmployeeDAO.findAll();
 	}
 
-	public Long CREATED_DATE = Instant.EPOCH.getEpochSecond();
-	public Long LAST_MODIFIED_DATE = Instant.EPOCH.getEpochSecond();
+
 
 	//public Mono<Employee> create(EmployeeDTO empl) {
 	public Mono<String> create(EmployeeDTO empl) {
@@ -57,9 +56,9 @@ public class EmployeeService implements IEmployeeService {
 
 		Employee employee = MappingDtoToEntity.convertEmployeeEntity(empl);
 		employee.setCreatedBy(CommonUtils.CREATED_BY);
-		employee.setCreatedOn(CREATED_DATE);
+		employee.setCreatedOn(CommonUtils.CREATED_DATE);
 		employee.setLastModifiedBy(CommonUtils.LAST_MODIFIED_BY);
-		employee.setLastModifiedOn(LAST_MODIFIED_DATE);
+		employee.setLastModifiedOn(CommonUtils.LAST_MODIFIED_DATE);
 		employee.setStatus(new Short("1"));
 		return iEmployeeDAO.create(employee);// Mono.just(resCreateResponseDTO);
 	}
@@ -75,9 +74,6 @@ public class EmployeeService implements IEmployeeService {
 	}
 
 	public Mono<EmployeeDTO> update(EmployeeDTO e) {
-		
-		///iEmployeeDAO.findById(e.getId()).zipWhen(e.getId() ->  iEmployeeDAO.update(null), (e.getId(), r));
-		
 		
 		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e)));
 	}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springflexcounchdb.common.CommonUtils;
 import com.springflexcounchdb.dto.AddressDTO;
 import com.springflexcounchdb.dto.EmployeeDTO;
 import com.springflexcounchdb.model.Address;
@@ -56,9 +57,13 @@ public class MappingDtoToEntity {
 
 	public static Mono<EmployeeDTO> convertEmpoyeeToMono(Mono<Employee> employee) {
 		return employee.flatMap(employe -> {
-			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getCouchDbID(), employe.getId(), employe.get_rev(),
-					employe.getName(), employe.getAge(), convertEmpoyeeToDTO(employe.getAddress()));
+//			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getCouchDbID(), employe.getId(), employe.get_rev(),
+//					employe.getName(), employe.getAge(), convertEmpoyeeToDTO(employe.getAddress()));
 
+			final EmployeeDTO employeeDTO = new EmployeeDTO(employe.getCouchDbID(), employe.getId(), employe.get_rev(),
+					employe.getName(), employe.getAge(), convertEmpoyeeToDTO(employe.getAddress()), employe.getCreatedBy(), employe.getCreatedOn(), employe.getLastModifiedBy(), CommonUtils.LAST_MODIFIED_DATE, employe.getStatus());
+
+			
 //	                studentDto.setStudents(
 //	                        persons.getPersons()
 //	                         .stream().filter(person -> person.isStudent())
