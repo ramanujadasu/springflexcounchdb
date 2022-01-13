@@ -7,28 +7,27 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IEmployeeDAO {
-	
+
+	Mono<String> create(Employee e);
+
+	Mono<Employee> update(Employee e);
+
+	Mono<Employee> patch(Employee e);
+
+	Mono<Void> delete(String id);
+
+	Mono<String> createDataBase(String database);
+
 	Flux<Employee> findAll();
 
 	Mono<Employee> findById(String id);
 
 	Flux<Employee> findByName(String name);
 
-	//Mono<Employee> create(Employee e);
-	Mono<String> create(Employee e);
-	
-	Mono<String> createDataBase(String database);
+	Flux<Employee> findByProperties(SearchDTO searchDTO);
 
-	Mono<Employee> update(Employee e);
-	
-	Mono<Employee> patch(Employee e);
+	Flux<Employee> findByProperties(String name, String addressId);
 
-	Mono<Void> delete(String id);
+	Flux<Employee> findByPropertiesWithBody(String searchAsString);
 
-	Mono<Employee> findByProperties(SearchDTO searchDTO);
-	
-	Mono<Employee> findByProperties(String name, String addressId);
-	
-	Mono<Employee> findByProperties(String searchAsString);
-	
 }

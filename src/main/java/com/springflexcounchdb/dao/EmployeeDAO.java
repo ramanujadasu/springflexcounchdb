@@ -3,9 +3,7 @@ package com.springflexcounchdb.dao;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.springflexcounchdb.common.CommonUtils;
@@ -27,35 +25,10 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 		super(Employee.class, webClient);
 	}
 
-	public Flux<Employee> findAll() {
-		return findAll(database);
-	}
-
 	public Mono<String> create(Employee empl) {
 		String body = CommonUtils.convertEntityToJsonObject(empl);
 		System.out.println("Creating  body:" + body);
 		return save(database, body);
-	}
-
-	public Flux<Employee> findByName(String name) {
-		String body = "{ \"selector\":{ \"name\":{ \"$eq\":\"" + name
-				+ "\" } }, \"limit\":2, \"skip\":0, \"execution_stats\":true }";
-		return findByName(database, body);
-	}
-
-	public Mono<Employee> findByProperties(String name, String addressId) {
-
-		String body = "{\"selector\":{\"address\":[{\"addressId\":\"" + addressId + "\"}], \"name\":{ \"$eq\":\"" + name
-				+ "\" } }}";
-		System.out.println("body: " + body);
-
-		return webClient.post().uri("/" + database + "/_find").accept(MediaType.APPLICATION_JSON)
-				.body(BodyInserters.fromObject(body)).retrieve().bodyToMono(Employee.class);
-
-	}
-
-	public Mono<Employee> findById(String id) {
-		return findById(database, id);
 	}
 
 	public Mono<Employee> update(Employee empl) {
@@ -79,10 +52,38 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 		return createGivenDatabase(databaseName);
 	}
 
-	@Override
-	public Mono<Employee> findByProperties(SearchDTO searchDTO) {
-		StringBuilder body = new StringBuilder("{");
+	public Flux<Employee> findAll() {
+		return findAll(database);
+	}
 
+	public Flux<Employee> findByName(String name) {
+		String body = "{ \"selector\":{ \"name\":{ \"$eq\":\"" + name
+				+ "\" } }, \"limit\":2, \"skip\":0, \"execution_stats\":true }";
+		return find(database, body);
+	}
+
+	public Flux<Employee> findByProperties(String name, String addressId) {
+
+		String body = "{\"selector\":{\"address\":[{\"addressId\":\"" + addressId + "\"}], \"name\":{ \"$eq\":\"" + name
+				+ "\" } }}";
+		System.out.println("body: " + body);
+		return find(database, body);
+	}
+
+	public Flux<Employee> findByPropertiesWithBody(String searchAsString) {
+
+		System.out.println("request searchAsString: " + searchAsString);
+		// request searchAsString:
+		// {"selector":{"name":{"$eq":"dasu"},"age":{"$gt":10}},"fields":["name","age"],"sort":[{"name":"asc"}],"limit":2,"skip":0,"execution_stats":true}
+		return find(database, searchAsString);
+	}
+
+	public Mono<Employee> findById(String id) {
+		return findById(database, id);
+	}
+
+	public Flux<Employee> findByProperties(SearchDTO searchDTO) {
+		StringBuilder body = new StringBuilder("{");
 		Map<String, Object> properties = searchDTO.getProperties();
 		for (Map.Entry<String, Object> s : properties.entrySet()) {
 			if (s.getValue() != null) {
@@ -92,19 +93,7 @@ public class EmployeeDAO extends RcpRepository<Employee, String> implements IEmp
 		body.substring(0, body.length() - 1);
 		body.append("}");
 		System.out.println("request body: " + body.toString());
-//		return webClient.post().uri("/"+database+"/_find").accept(MediaType.APPLICATION_JSON)
-//				.body(BodyInserters.fromObject(body.toString())).retrieve().bodyToMono(Object.class);
-		return null;
+		return findByProperties(database, body.toString());
 	}
 
-	@Override
-	public Mono<Employee> findByProperties(String searchAsString) {
-
-		System.out.println("request searchAsString: " + searchAsString);
-		// request searchAsString:
-		// {"selector":{"name":{"$eq":"dasu"},"age":{"$gt":10}},"fields":["name","age"],"sort":[{"name":"asc"}],"limit":2,"skip":0,"execution_stats":true}
-//		return webClient.post().uri("/"+database+"/_find").accept(MediaType.APPLICATION_JSON)
-//				.body(BodyInserters.fromObject(searchAsString)).retrieve().bodyToMono(Object.class);
-		return null;
-	}
 }

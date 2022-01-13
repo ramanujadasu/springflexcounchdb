@@ -19,49 +19,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springflexcounchdb.common.CommonUtils;
 import com.springflexcounchdb.dto.EmployeeDTO;
-import com.springflexcounchdb.model.Employee;
 import com.springflexcounchdb.service.IEmployeeService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * 
+ * @author vsrr.ramanujadasu
+ *
+ */
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+
 	@Autowired
 	private IEmployeeService employeeService;
 
-	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Flux<EmployeeDTO>> findAll() {
-		ResponseEntity<Flux<EmployeeDTO>> response = null;
-		try {
-			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findAll(), HttpStatus.OK);
-		} catch (Exception ex) {
-			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return response;
-	}
-
-	@GetMapping(value = "/{id}")
-	public Mono<EmployeeDTO> findById(@PathVariable("id") String id) {
-		return employeeService.findById(id);
-	}
-
-	@GetMapping(value = "/find-by-name/{name}")
-	public ResponseEntity<Flux<EmployeeDTO>> findByName(@PathVariable("name") String name) {
-		ResponseEntity<Flux<EmployeeDTO>> response = null;
-		try {
-			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findByName(name), HttpStatus.OK);
-		} catch (Exception ex) {
-			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return response;
-	}
-
+	/**
+	 * 
+	 * @param employeeDTO
+	 * @return
+	 */
 	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Mono<String>> create(@RequestBody EmployeeDTO employeeDTO) {
 		ResponseEntity<Mono<String>> response = null;
@@ -73,6 +54,12 @@ public class EmployeeController {
 		return response;
 	}
 
+	/**
+	 * 
+	 * @param employeeDTO
+	 * @param id
+	 * @return
+	 */
 	@PutMapping(value = "/update/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Mono<EmployeeDTO>> update(@RequestBody EmployeeDTO employeeDTO,
@@ -86,7 +73,13 @@ public class EmployeeController {
 		}
 		return response;
 	}
-	
+
+	/**
+	 * 
+	 * @param employeeDTO
+	 * @param id
+	 * @return
+	 */
 	@PatchMapping(value = "/patch/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Mono<EmployeeDTO>> patch(@RequestBody EmployeeDTO employeeDTO,
@@ -100,8 +93,12 @@ public class EmployeeController {
 		}
 		return response;
 	}
-	
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping(value = "/delete/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Mono<ResponseEntity<?>> delete(@PathVariable(required = true, name = "id") String id) {
@@ -114,6 +111,11 @@ public class EmployeeController {
 		return response;
 	}
 
+	/**
+	 * 
+	 * @param database
+	 * @return
+	 */
 	@GetMapping(value = "/createDatabase/{database}")
 	public ResponseEntity<Mono<String>> createDatabase(@PathVariable String database) {
 		ResponseEntity<Mono<String>> response = null;
@@ -128,29 +130,85 @@ public class EmployeeController {
 		return response;
 	}
 
-	@PostMapping(value = "/find-by-properties")
-	public Mono<Employee> findByProperties2(@RequestBody Map<String, Object> searchAsString) {
-
-		// Do whatever with the json as String
-		System.out.println(searchAsString);
-
-//	    Gson gson = new Gson();
-//        String json = gson.toJson(payload); 
-		String json = "";
+	/**
+	 * 
+	 * @return
+	 */
+	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Flux<EmployeeDTO>> findAll() {
+		ResponseEntity<Flux<EmployeeDTO>> response = null;
 		try {
-			json = new ObjectMapper().writeValueAsString(searchAsString);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findAll(), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		System.out.println(json);
-
-		return employeeService.findByProperties(json);
+		return response;
 	}
 
-	@GetMapping(value = "/find")
-	public Mono<Employee> find(@RequestParam String name, @RequestParam String addressId) {
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value = "/{id}")
+	public Mono<EmployeeDTO> findById(@PathVariable("id") String id) {
+		return employeeService.findById(id);
+	}
 
-		System.out.println("Name: " + name + ", addressId: " + addressId);
-		return employeeService.findByProperties(name, addressId);
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	@GetMapping(value = "/find-by-name/{name}")
+	public ResponseEntity<Flux<EmployeeDTO>> findByName(@PathVariable("name") String name) {
+		ResponseEntity<Flux<EmployeeDTO>> response = null;
+		try {
+			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findByName(name), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+
+	/**
+	 * 
+	 * @param searchAsString
+	 * @return
+	 */
+	@PostMapping(value = "/find-by-properties")
+	public ResponseEntity<Flux<EmployeeDTO>> findByPropertiesWithBody(@RequestBody Map<String, Object> searchAsString) {
+		ResponseEntity<Flux<EmployeeDTO>> response = null;
+		try {
+			System.out.println(searchAsString);
+			String givenBody = CommonUtils.convertEntityToJsonObject(searchAsString);
+			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findByPropertiesWithBody(givenBody),
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @param addressId
+	 * @return
+	 */
+	@GetMapping(value = "/find")
+	public ResponseEntity<Flux<EmployeeDTO>> find(@RequestParam String name, @RequestParam String addressId) {
+
+		ResponseEntity<Flux<EmployeeDTO>> response = null;
+		try {
+			System.out.println("Name: " + name + ", addressId: " + addressId);
+			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findByProperties(name, addressId),
+					HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+
 	}
 }

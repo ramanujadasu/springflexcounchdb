@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.springflexcounchdb.common.CommonUtils;
 import com.springflexcounchdb.common.CouchDbOperationConstant;
+import com.springflexcounchdb.model.Employee;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -104,7 +105,7 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 	}
 
 	@Override
-	public Flux<T> findByName(String docName, String body) {
+	public Flux<T> find(String docName, String body) {
 		return (Flux<T>) webClient.post().uri(SLASH + docName + CouchDbOperationConstant.FIND)
 				.accept(MediaType.APPLICATION_JSON).body(BodyInserters.fromObject(body)).retrieve()
 				.bodyToFlux(JsonNode.class).map(jsonNode -> jsonNode.get("docs"));
@@ -115,4 +116,5 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 		return webClient.put().uri(SLASH + docName).accept(MediaType.APPLICATION_JSON).retrieve()
 				.bodyToMono(JsonNode.class).map(jsonNode -> String.format(CouchDbOperationConstant.REV_VAL, jsonNode.get("ok")));
 	}
+
 }

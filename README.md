@@ -8,3 +8,9 @@ Steps to configure this project:
 			counchdb.user, couchdb.password, couchdb.url
 	4.	Create the couchdb database in the couchdb http url (database should be: employees)
 	5.	Import the postman apis from docs folder
+
+	
+Reference Documents:
+
+	1.	Swagger api: https://www.baeldung.com/spring-rest-openapi-documentation
+	

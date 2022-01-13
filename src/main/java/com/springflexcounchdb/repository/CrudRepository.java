@@ -11,7 +11,7 @@ public interface CrudRepository<T, ID> {
 
 	Flux<T> findAll(String database);
 
-	Flux<T> findByName(String database, String name);
+	Flux<T> find(String database, String name);
 
 	// TODO
 	Mono<T> update(String database, ID id, String body);

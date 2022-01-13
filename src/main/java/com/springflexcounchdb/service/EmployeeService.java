@@ -1,7 +1,5 @@
 package com.springflexcounchdb.service;
 
-import java.time.Instant;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class EmployeeService implements IEmployeeService {
+
 	@Autowired
 	@Qualifier("employeeDAO")
 	IEmployeeDAO iEmployeeDAO;
@@ -26,33 +25,7 @@ public class EmployeeService implements IEmployeeService {
 		return MappingDtoToEntity.convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(iEmployeeDAO.findAll());
 	}
 
-
-
-	//public Mono<Employee> create(EmployeeDTO empl) {
 	public Mono<String> create(EmployeeDTO empl) {
-
-//		{
-//		    "ok": true,
-//		    "id": "1223",
-//		    "rev": "1-638ede4e484d9d9c5abcbe60154d33c0"
-//		}
-//		Object obj = iEmployeeDAO.create(MappingDtoToEntity.convertEmployeeEntity(empl));
-//		CreateResponseDTO resCreateResponseDTO = null;
-//		ObjectMapper mapper = new ObjectMapper();
-//		String jsonString;
-//		try {
-//			jsonString = mapper.writeValueAsString(obj);
-//			System.out.println("jsonString: "+ jsonString);
-//			resCreateResponseDTO = mapper.readValue(jsonString, CreateResponseDTO.class);
-//			System.out.println("data: "+ resCreateResponseDTO);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.err.println("Error: "+ e.getMessage());
-//		}
-
-//		Mono<Object> result = createDataBase("employee1341");
-//		System.out.println("Creating database result:"+result);
 
 		Employee employee = MappingDtoToEntity.convertEmployeeEntity(empl);
 		employee.setCreatedBy(CommonUtils.CREATED_BY);
@@ -68,21 +41,21 @@ public class EmployeeService implements IEmployeeService {
 	}
 
 	public Mono<EmployeeDTO> findById(String id) {
-		
-		
+
 		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.findById(id));
 	}
 
 	public Mono<EmployeeDTO> update(EmployeeDTO e) {
-		
-		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e)));
+
+		return MappingDtoToEntity
+				.convertEmpoyeeToMono(iEmployeeDAO.update(MappingDtoToEntity.convertEmployeeEntity(e)));
 	}
 
 	public Mono<EmployeeDTO> patch(EmployeeDTO e) {
-		
+
 		return MappingDtoToEntity.convertEmpoyeeToMono(iEmployeeDAO.patch(MappingDtoToEntity.convertEmployeeEntity(e)));
 	}
-	
+
 	public Mono<Void> delete(String id) {
 		System.out.println("service delete");
 		Mono<Void> deleteResult = iEmployeeDAO.delete(id);
@@ -90,23 +63,24 @@ public class EmployeeService implements IEmployeeService {
 		return deleteResult;
 	}
 
-	public Mono<Employee> findByProperties(SearchDTO searchDTO) {
-		return iEmployeeDAO.findByProperties(searchDTO);
+	public Flux<EmployeeDTO> findByProperties(SearchDTO searchDTO) {
+		return MappingDtoToEntity
+				.convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(iEmployeeDAO.findByProperties(searchDTO));
 	}
 
-	@Override
-	public Mono<Employee> findByProperties(String name, String addressId) {
-		return iEmployeeDAO.findByProperties(name, addressId);
+	public Flux<EmployeeDTO> findByProperties(String name, String addressId) {
+		return MappingDtoToEntity
+				.convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(iEmployeeDAO.findByProperties(name, addressId));
 	}
 
-	@Override
-	public Mono<Employee> findByProperties(String searchAsString) {
-		return iEmployeeDAO.findByProperties(searchAsString);
+	public Flux<EmployeeDTO> findByPropertiesWithBody(String searchAsString) {
+		return MappingDtoToEntity
+				.convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(iEmployeeDAO.findByPropertiesWithBody(searchAsString));
 	}
 
 	@Override
 	public Mono<String> createDataBase(String database) {
-		
+
 		return iEmployeeDAO.createDataBase(database);
 	}
 }
