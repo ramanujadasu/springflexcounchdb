@@ -36,12 +36,12 @@ public class EmployeeController {
 
 	@GetMapping(value = "/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Flux<Employee>> findAll() {
-		ResponseEntity<Flux<Employee>> response = null;
+	public ResponseEntity<Flux<EmployeeDTO>> findAll() {
+		ResponseEntity<Flux<EmployeeDTO>> response = null;
 		try {
-			response = new ResponseEntity<Flux<Employee>>(employeeService.findAll(), HttpStatus.OK);
+			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findAll(), HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<Flux<Employee>>(HttpStatus.INTERNAL_SERVER_ERROR); 
+			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
@@ -52,12 +52,12 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/find-by-name/{name}")
-	public ResponseEntity<Flux<Employee>> findByName(@PathVariable("name") String name) {
-		ResponseEntity<Flux<Employee>> response = null;
+	public ResponseEntity<Flux<EmployeeDTO>> findByName(@PathVariable("name") String name) {
+		ResponseEntity<Flux<EmployeeDTO>> response = null;
 		try {
-			response = new ResponseEntity<Flux<Employee>>(employeeService.findByName(name), HttpStatus.OK);
+			response = new ResponseEntity<Flux<EmployeeDTO>>(employeeService.findByName(name), HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<Flux<Employee>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Flux<EmployeeDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}

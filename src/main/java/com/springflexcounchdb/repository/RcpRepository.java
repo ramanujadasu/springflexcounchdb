@@ -107,7 +107,7 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 	public Flux<T> findByName(String docName, String body) {
 		return (Flux<T>) webClient.post().uri(SLASH + docName + CouchDbOperationConstant.FIND)
 				.accept(MediaType.APPLICATION_JSON).body(BodyInserters.fromObject(body)).retrieve()
-				.bodyToFlux(JsonNode.class).flatMapIterable(jsonNode -> jsonNode.get("docs"));
+				.bodyToFlux(JsonNode.class).map(jsonNode -> jsonNode.get("docs"));
 	}
 
 	@Override

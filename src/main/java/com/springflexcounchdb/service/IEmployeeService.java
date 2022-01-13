@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 
 public interface IEmployeeService {
 
-	Flux<Employee> findAll();
+	Flux<EmployeeDTO> findAll();
 
 	Mono<EmployeeDTO> findById(String id);
 
-	Flux<Employee> findByName(String name);
+	Flux<EmployeeDTO> findByName(String name);
 
 	//Mono<Employee> create(EmployeeDTO e);
 	Mono<String> create(EmployeeDTO e);

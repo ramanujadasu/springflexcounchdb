@@ -22,8 +22,8 @@ public class EmployeeService implements IEmployeeService {
 	@Qualifier("employeeDAO")
 	IEmployeeDAO iEmployeeDAO;
 
-	public Flux<Employee> findAll() {
-		return iEmployeeDAO.findAll();
+	public Flux<EmployeeDTO> findAll() {
+		return MappingDtoToEntity.convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(iEmployeeDAO.findAll());
 	}
 
 
@@ -63,8 +63,8 @@ public class EmployeeService implements IEmployeeService {
 		return iEmployeeDAO.create(employee);// Mono.just(resCreateResponseDTO);
 	}
 
-	public Flux<Employee> findByName(String name) {
-		return iEmployeeDAO.findByName(name);
+	public Flux<EmployeeDTO> findByName(String name) {
+		return MappingDtoToEntity.convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(iEmployeeDAO.findByName(name));
 	}
 
 	public Mono<EmployeeDTO> findById(String id) {

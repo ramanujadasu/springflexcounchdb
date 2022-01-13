@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springflexcounchdb.common.CommonUtils;
 import com.springflexcounchdb.dto.AddressDTO;
@@ -136,6 +137,32 @@ public class MappingDtoToEntity {
 					convertEmpoyeeDTOToEntity(e̛mployeeDto.getAddress()));
 			return Mono.just(employee);
 		});
+	}
+
+	public static Flux<EmployeeDTO> convertFluxOfListOfEmployeeToFluxOfEmployeeDTO(Flux<Employee> employeeFlux) {
+		List<EmployeeDTO> listOfempDTO = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
+		employeeFlux.collectList();
+		Mono<List<EmployeeDTO>> listEmpMono = employeeFlux.collectList()
+				.flatMap(empList -> {
+					for(int i=0; i<empList.size();i++){
+						List<Employee> emp = new ArrayList<>();
+						try {
+							String convertedIntoString = mapper.writeValueAsString(empList.get(i));
+							emp = mapper.readValue(convertedIntoString, new TypeReference<List<Employee>>(){});
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						emp.forEach(employee -> {
+							EmployeeDTO employeeDTO = new EmployeeDTO(employee.getCouchDbID(), employee.getId(),
+									employee.get_rev(), employee.getName(), employee.getAge(),
+									convertEmpoyeeToDTO(employee.getAddress()));
+							listOfempDTO.add(employeeDTO);
+						});
+					}
+					return Mono.just(listOfempDTO);
+				});
+		return listEmpMono.flatMapMany(Flux::fromIterable);
 	}
 
 }

@@ -82,8 +82,9 @@ public class EmployeeServiceTest {
 		Employee employee= new Employee("12", "1", "1-1234", "Test-Employee1", 20, addressList);
 		Employee employee2= new Employee("34", "2", "2-1234", "Test-Employee2", 21, addressList);
 		Flux<Employee> fluxEmployee= Flux.just(employee, employee2);
-		
-		when(employeeService.findAll()).thenReturn(fluxEmployee);
+
+		//TODO
+		//when(employeeService.findAll()).thenReturn(fluxEmployee);
 		
 	}
 	
