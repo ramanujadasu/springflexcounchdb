@@ -43,20 +43,15 @@ public class EmployeeServiceTest {
 		addressDTOList.add(new com.springflexcounchdb.dto.AddressDTO("address"));
 		List<Address> addressList= new ArrayList<>(); 
 		addressList.add(new com.springflexcounchdb.model.Address("address"));
-		com.springflexcounchdb.dto.EmployeeDTO employeeDTO= new com.springflexcounchdb.dto.EmployeeDTO("1", "1", "1-1234", "Test-Employee", 20, addressDTOList);
+		EmployeeDTO employeeDTO= new com.springflexcounchdb.dto.EmployeeDTO("1", "1", "1-1234", "Test-Employee", 20, addressDTOList);
 		
-		com.springflexcounchdb.model.Employee employee = new com.springflexcounchdb.model.Employee("1", "1", "1-1234", "Test-Employee", 20, addressList);
+		Employee employee = new com.springflexcounchdb.model.Employee("1", "1", "1-1234", "Test-Employee", 20, addressList);
+		Mono<String> id = Mono.just("1");
 		
-		when(employeeDAO.create(employee).thenReturn(Mono.just("1")));
-		Mono<String> responseEmployee  = employeeService.create(employeeDTO);
+		when(employeeDAO.create(employee)).thenReturn(id);
+		Mono<String> response  = employeeService.create(employeeDTO);
 		
-		try {
-			assertEquals(true, responseEmployee.toFuture().get());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}					
+		assertEquals(id, response);
 	}
 	
 	@Test
@@ -106,7 +101,7 @@ public class EmployeeServiceTest {
 		//Mono<Employee> monoEmployee= Mono.just(new Employee("1", "1", "1-1234", "Test-Employee_Update", 20, addressList));
 		Mono<Employee> monoEmployee = Mono.just(employee);
 		
-		when(employeeDAO.update(employee).thenReturn(monoEmployee));
+		when(employeeDAO.update(employee)).thenReturn(monoEmployee);
 		Mono<EmployeeDTO> responseEmployee  = employeeService.update(employeeDTO);
 		
 		try {
