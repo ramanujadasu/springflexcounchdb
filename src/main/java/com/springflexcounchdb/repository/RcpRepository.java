@@ -45,8 +45,8 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 		return webClient.get().uri(SLASH + docName + SLASH + id).retrieve().bodyToMono(this.type).timeout(duration);
 	}
 
-	@Override
-	public Flux<T> findAll(String docName) {
+	public Flux<T> findAll2(String docName) {
+		
 		Flux<JsonNode> response = webClient.get().uri(SLASH + docName + CouchDbOperationConstant.FIND_ALL).retrieve()
 				.bodyToFlux(JsonNode.class).timeout(duration).flatMapIterable(jsonNode -> jsonNode.get("rows"));
 
@@ -54,6 +54,17 @@ public class RcpRepository<T, ID> implements CrudRepository<T, ID> {
 		return (Flux<T>) monoRes.flatMapMany(s -> Flux.just(s));
 	}
 
+	@Override
+	public Flux<T> findAll(String docName) {
+		
+		Flux<JsonNode> response = webClient.get().uri(SLASH + docName + CouchDbOperationConstant.FIND_ALL).retrieve()
+				.bodyToFlux(JsonNode.class).timeout(duration).flatMapIterable(jsonNode -> jsonNode.get("rows"));
+
+		Mono<List<T>> monoRes = response.flatMap(res -> findById(docName, (ID) res.get("id").asText())).collectList();
+		return (Flux<T>) monoRes.flatMapMany(s -> Flux.just(s));
+	}
+	
+	
 	public Mono<T> update(String docName, ID id, String body) {
 		System.out.println("update body2: "+ body);
 		
